@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_filter_kategori"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Filter"/>
+
+    <!-- Harga -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/icon_harga"
+                style="@style/AppTheme.FilterIcon"
+                android:layout_centerVertical="true"
+                android:tint="@color/Color_Green"
+                app:srcCompat="@drawable/icons_money_50" />
+
+            <TextView
+                android:layout_height="30dp"
+                android:layout_width="match_parent"
+                android:layout_toRightOf="@+id/icon_harga"
+                android:text="Filter Harga"
+                android:gravity="center_vertical"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Harga minimum"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Harga maksimum"
+                    android:gravity="right"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <faranjit.currency.edittext.CurrencyEditText
+                    android:id="@+id/harga_awal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="numberDecimal"
+                    android:textColor="@android:color/black"
+                    android:text="100"
+                    android:maxLength="7"
+                    app:locale="id_ID"
+                    app:showSymbol="false" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"/>
+
+                <faranjit.currency.edittext.CurrencyEditText
+                    android:id="@+id/harga_akhir"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_weight="1"
+                    android:inputType="numberDecimal"
+                    android:textColor="@android:color/black"
+                    android:text="1000000"
+                    android:maxLength="9"
+                    app:locale="id_ID"
+                    app:showSymbol="false" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
+            android:id="@+id/rangeSeekbar1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:bar_color="@color/Color_LightGrey"
+            app:bar_highlight_color="@color/Color_Green"
+            app:left_thumb_color="@color/Color_Green"
+            app:right_thumb_color="@color/Color_Green"
+            app:min_value="100"
+            app:max_value="1000000"
+            app:steps="5000"/>
+
+    </LinearLayout>
+
+    <!-- Lokasi -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/icon_lokasi"
+                style="@style/AppTheme.FilterIcon"
+                android:layout_centerVertical="true"
+                android:tint="@color/Color_Green"
+                app:srcCompat="@drawable/ic_add_location_black_24dp" />
+
+            <TextView
+                android:layout_height="30dp"
+                android:layout_width="match_parent"
+                android:layout_toRightOf="@+id/icon_lokasi"
+                android:text="Filter Lokasi Penjual"
+                android:gravity="center_vertical"/>
+
+        </RelativeLayout>
+
+        <Spinner
+            android:id="@+id/spinner_lokasi"
+            android:layout_width="match_parent"
+            style="@style/AppTheme.FilterSpinner"
+            android:layout_centerVertical="true"
+            android:entries="@array/arrKecamatan" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_filter_ya"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="0.1dp"
+            android:background="@color/white"
+            android:shadowColor="@color/md_black_1000"
+            android:text="Ya"/>
+        <Button
+            android:id="@+id/btn_filter_tidak"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:shadowColor="@color/md_black_1000"
+            android:text="Tidak"/>
+    </LinearLayout>
+
+</LinearLayout>

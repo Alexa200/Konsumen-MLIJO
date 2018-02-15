@@ -1,0 +1,187 @@
+<resources>
+    <!-- Apps -->
+    <string name="notification">Notification</string>
+    <string name="chooseImageOrTakePicture">Choose a photo from the gallery or take a photo</string>
+    <string name="chooseImage">Select photo</string>
+    <string name="takePicture">Take a photo</string>
+    <string name="msg_simpan_img_error">simpan gambar error</string>
+    <string name="msg_gambar_tersimpan">gambar tersimpan</string>
+    <!-- Title -->
+    <string name="app_name">Mlijo Konsumen</string>
+    <string name="title_activity_dashboard">Dashboard</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_pesan_produk">Pesan Produk</string>
+    <string name="title_activity_pesan_produk_khusus">Pesan Produk Khusus</string>
+    <string name="title_kelola_pembelian">Kelola Pembelian</string>
+    <string name="title_atur_profil">Pengaturan Profil</string>
+    <string name="title_pengaturan">Pengaturan</string>
+    <string name="title_activity_kelola_alamat">Pengaturan Alamat</string>
+    <string name="title_activity_tambah_alamat">Tambah Alamat Baru</string>
+    <string name="title_activity_detail_transaksi">Detail Transaksi</string>
+    <string name="title_activity_obrolan">Daftar Obrolan</string>
+    <string name="title_activity_tambah_ulasan">Ulasan Transaksi</string>
+    <string name="title_profil">Profil</string>
+    <string name="title_activity_detail_penjual">Detail Penjual</string>
+    <!-- Hint -->
+    <string name="hint_pengaturan">  Pengaturan  </string>
+    <string name="action_settings">Settings</string>
+    <string name="search_hint">cari</string>
+    <!-- Button -->
+    <!-- Label -->
+    <string name="lbl_ya">Ya</string>
+    <string name="lbl_tidak">Tidak</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <!-- Pesan -->
+    <string name="ok">OK</string>
+    <string name="msg_retry">Coba lagi</string>
+    <string name="msg_noInternet">Anda tidak tersambung internet, silahkan cek kembali koneksi anda</string>
+    <string name="msg_navigation_drawer_open">Open navigation drawer</string>
+    <string name="msg_navigation_drawer_close">Close navigation drawer</string>
+    <string name="msg_loading">loading...</string>
+    <string name="msg_confirmLogOut">Apakah anda yakin akan logout?</string>
+    <string name="msg_input_kode_verifikasi">SMS verifikasi telah dikirim ke nomor Anda yang terdaftar.
+        Harap masukan kode yang tertera pada sms ke dalam kolom di bawah.
+        Ulangi kirim kode apabila dalam 60 detik tidak ada sms masuk</string>
+    <!-- Apps -->
+
+    <!-- KonsumenModel -->
+    <string name="action_sign_in_short">Register</string>
+    <!-- Hint -->
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Sandi Anda</string>
+    <string name="hint_name">Nama Lengkap</string>
+    <string name="hint_nama_penerima">Nama Penerima</string>
+    <string name="hint_noTelp">Nomor Telepon</string>
+    <string name="hint_alamat">Alamat Lengkap</string>
+    <string name="hint_lokasi_alamat">Ketuk untuk koordinat lokasi alamat</string>
+    <string name="hint_judul_alamat">Isi dengan alamat sebagai(Contoh : Alamat Rumah)</string>
+    <!-- Button -->
+    <string name="btn_login">LOGIN</string>
+    <string name="btn_forgot_password">Lupa Sandi Anda?</string>
+    <string name="btn_reset_password">Reset Sandi</string>
+    <string name="btn_back"><![CDATA[<< Kembali]]></string>
+    <string name="btn_simpan">Simpan</string>
+    <string name="btn_submit">Submit</string>
+    <!-- Label -->
+    <string name="lbl_forgot_password">Lupa Sandi?</string>
+    <string name="lbl_kelola_profil">Kelola Profil</string>
+    <string name="lbl_atur_alamat">Pengaturan Alamat</string>
+    <!-- Pesan -->
+    <string name="msg_email_kosong">Mohon isi email anda</string>
+    <string name="msg_minimum_password">Sandi terlalu pendek, input minimal 6 karakter</string>
+    <string name="msg_password_kosong">Mohon isi password anda</string>
+    <string name="msg_auth_failed">Login gagal, silahkan cek email atau sandi anda</string>
+    <string name="msg_forgot_password">Kami membutuhkan email anda yang terdaftar untuk mengirimkan instruksi reset sandi.</string>
+    <string name="msg_kirim_link_password">Link reset password telah dikirim ke email anda</string>
+    <string name="msg_gagal_reset_password">Reset password gagal, ulangi kembali</string>
+    <!-- KonsumenModel -->
+
+    <!-- Dashboard -->
+    <!-- Hint -->
+    <!-- Button -->
+    <!-- Label -->
+    <string name="lbl_kategori">Kategori Produk</string>
+    <string name="lbl_penjual">Daftar Penjual</string>
+    <!-- Pesan -->
+
+
+    <!-- Produk -->
+    <!-- Hint -->
+    <!-- Button -->
+    <!-- Label -->
+    <string name="lbl_nama_produk">Nama Produk</string>
+    <string name="lbl_jumlah_produk">Jumlah Produk</string>
+    <string name="lbl_satuan_produk">Satuan Produk</string>
+    <!-- Pesan -->
+
+
+
+    <string name="value_any_category">Semua Kategori</string>
+    <string name="value_any_location">Semua Area Kecamatan</string>
+    <!-- Data -->
+    <string-array name="arrKategori">
+        <item>@string/value_any_category</item>
+
+        <item>Sayuran</item>
+        <item>Buah</item>
+        <item>Daging</item>
+        <item>Ikan dan Makanan Laut</item>
+        <item>Palawija</item>
+        <item>Bumbu Dapur</item>
+        <item>Lain - lain</item>
+    </string-array>
+
+    <string-array name="arrSatuan">
+        <item>Gram(Gr)</item>
+        <item>KiloGram(Kg)</item>
+        <item>Mililiter(ml)</item>
+        <item>Liter(L)</item>
+        <item>Buah/Butir</item>
+        <item>Lusin</item>
+        <item>Ekor</item>
+    </string-array>
+
+    <string-array name="arrKecamatan">
+        <item>@string/value_any_location</item>
+
+        <item>Klojen</item>
+        <item>Blimbing</item>
+        <item>Lowokwaru</item>
+        <item>Sukun</item>
+        <item>KedungKandang</item>
+    </string-array>
+
+
+    <!-- Pesan Produk -->
+    <!-- Hint -->
+    <string name="hint_note_penjual">Catatan untuk Penjual</string>
+    <string name="hint_porsi">Porsi</string>
+    <!-- Button -->
+    <!-- Label -->
+    <string name="lbl_alamat_kirim">Alamat Pengiriman</string>
+    <string name="lbl_total_harga">Total Harga Produk :</string>
+    <string name="lbl_porsi">(Harga 1 Porsi)</string>
+    <string name="lbl_waktu_pengiriman">Pilih Waktu Antar Pesanan</string>
+    <!-- Pesan -->
+
+    <!-- Kelola Pembelian -->
+    <!-- Hint -->
+    <!-- Button -->
+    <!-- Label -->
+    <string name="lbl_pesanan_baru">Pesanan Baru</string>
+    <string name="lbl_status_pembelian">Status Pembelian</string>
+    <string name="lbl_riwayat_transaksi">Riwayat Transaksi</string>
+    <string name="lbl_keterangan_pesanan">Detail Pesanan</string>
+    <string name="lbl_biaya_kirim">Biaya Kirim :</string>
+    <string name="lbl_status_transaksi">Status Transaksi :</string>
+    <string name="lbl_nama_penerima">Diterima oleh :</string>
+    <!-- Pesan -->
+    <!-- Kelola Pembelian -->
+
+    <!-- Ulasan -->
+    <!-- Hint -->
+    <!-- Button -->
+    <!-- Label -->
+    <string name="lbl_sangat_bagus">Sangat Bagus</string>
+    <string name="lbl_bagus">Bagus</string>
+    <string name="lbl_biasa">Biasa saja</string>
+    <string name="lbl_buruk">Buruk</string>
+    <string name="lbl_sangat_buruk">Sangat Buruk</string>
+    <string name="lbl_penilaian_penjual">Penilaian Penjual</string>
+    <string name="lbl_kualitas_produk">Kualitas Produk</string>
+    <string name="lbl_kualitas_pelayanan">Kualitas Pelayanan</string>
+    <!-- Pesan -->
+    <!-- Ulasan -->
+
+
+    <string name="lbl_alamat">Alamat Lengkap</string>
+    <string name="lbl_informasi_penjual">Informasi Penjual</string>
+    <string name="lbl_nama_penjual">Nama Penjual</string>
+    <string name="lbl_detail_info">Detail Info</string>
+    <string name="hint_pilih_satuan">Pilih Satuan Produk</string>
+    <string name="_5_min">5 \n  MIN</string>
+    <string name="msg_error">Terjadi kesalahan, silahkan coba kembali</string>
+    <string name="title_bantuan">Bantuan</string>
+
+</resources>
