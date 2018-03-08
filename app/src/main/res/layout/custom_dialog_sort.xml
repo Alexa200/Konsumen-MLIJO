@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sorting_layout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:paddingLeft="20dp"
+        android:textSize="20dp"
+        android:gravity="center_vertical"
+        android:textStyle="bold"
+        android:text="Urutkan"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/md_black_1000"></View>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listview_sorting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_sorting_ya"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="0.1dp"
+            android:background="@color/white"
+            android:shadowColor="@color/md_black_1000"
+            android:text="Ya"/>
+        <Button
+            android:id="@+id/btn_sorting_tidak"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:shadowColor="@color/md_black_1000"
+            android:text="Tidak"/>
+    </LinearLayout>
+
+</LinearLayout>
