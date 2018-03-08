@@ -27,7 +27,8 @@
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp"
                 android:textColor="@color/colorPrimary"
-                android:drawableStart="@drawable/ic_sort_black_24dp"/>
+                android:drawableStart="@drawable/ic_sort_black_24dp"
+                android:drawableTint="@color/Color_Green"/>
 
             <Button
                 android:id="@+id/btn_filter"
@@ -39,7 +40,8 @@
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp"
                 android:textColor="@color/colorPrimary"
-                android:drawableStart="@drawable/ic_filter_list_black_24dp"/>
+                android:drawableStart="@drawable/ic_filter_list_black_24dp"
+                android:drawableTint="@color/Color_Green"/>
         </LinearLayout>
 
 

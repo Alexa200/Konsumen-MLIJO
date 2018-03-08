@@ -2,6 +2,8 @@ package com.mlijo.aryaym.konsumen_mlijo.Produk;
 
 import android.text.TextUtils;
 
+import com.google.firebase.firestore.Query;
+
 /**
  * Created by AryaYM on 13/02/2018.
  */
@@ -12,6 +14,8 @@ public class FilterProduk {
     private String lokasi = null;
     private double harga_awal = 0;
     private double harga_akhir = 10000000;
+    private String sortBy = null;
+    private Query.Direction sortDirection = null;
 
     public FilterProduk(){}
 
@@ -60,5 +64,21 @@ public class FilterProduk {
 
     public void setHarga_akhir(double harga_akhir) {
         this.harga_akhir = harga_akhir;
+    }
+
+    public String getSortBy() {
+        return sortBy;
+    }
+
+    public void setSortBy(String sortBy) {
+        this.sortBy = sortBy;
+    }
+
+    public Query.Direction getSortDirection() {
+        return sortDirection;
+    }
+
+    public void setSortDirection(Query.Direction sortDirection) {
+        this.sortDirection = sortDirection;
     }
 }

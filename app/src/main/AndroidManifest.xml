@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mlijo.aryaym.konsumen_mlijo">
 
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -37,7 +45,44 @@
         <activity
             android:name=".Produk.DaftarProdukActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".Produk.DaftarProdukPenjualActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Produk.DetailProdukActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PesanProduk.PesanProdukActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Penjual.PesanProdukKhususActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Penjual.DetailPenjualActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".KelolaPembelian.DaftarTransaksiActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".KelolaPembelian.DetailTransaksiActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Obrolan.ObrolanActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Ulasan.BuatUlasanActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Ulasan.DetailUlasanActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Pengaturan.PengaturanProfilActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.thefinestartist.finestwebview.FinestWebViewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensor"
+            android:theme="@style/FinestWebViewTheme.Light" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />

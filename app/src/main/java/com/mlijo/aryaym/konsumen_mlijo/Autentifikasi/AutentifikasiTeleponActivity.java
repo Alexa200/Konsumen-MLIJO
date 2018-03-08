@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,25 +20,20 @@ import com.rilixtech.CountryCodePicker;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class AutentifikasiTeleponActivity extends AppCompatActivity implements View.OnClickListener {
+public class AutentifikasiTeleponActivity extends AppCompatActivity {
 
     @BindView(R.id.txt_countdown)
     TextView txtCountdown;
-    @BindView(R.id.btn_edit_nomor)
-    ImageButton btnEditNomor;
     @BindView(R.id.input_kode_verifikasi)
     EditText inputKodeVerifikasi;
-    @BindView(R.id.btn_submit)
-    Button btnSubmit;
     @BindView(R.id.txt_phone_number)
     TextView txtPhoneNumber;
     @BindView(R.id.btn_kirim_ulang_kode)
     Button btnKirimUlangKode;
     @BindView(R.id.input_nomor_telepon)
     EditText inputNomorTelepon;
-    @BindView(R.id.btn_selanjutnya)
-    Button btnSelanjutnya;
     @BindView(R.id.layout_input_nomor)
     LinearLayout layoutInputNomor;
     @BindView(R.id.layout_input_kode)
@@ -57,11 +51,6 @@ public class AutentifikasiTeleponActivity extends AppCompatActivity implements V
         ButterKnife.bind(this);
 
         presenter = new AutentifikasiTeleponPresenter(this);
-
-        btnEditNomor.setOnClickListener(this);
-        btnSubmit.setOnClickListener(this);
-        btnKirimUlangKode.setOnClickListener(this);
-        btnSelanjutnya.setOnClickListener(this);
         layoutInputKode.setVisibility(View.GONE);
     }
 
@@ -102,22 +91,29 @@ public class AutentifikasiTeleponActivity extends AppCompatActivity implements V
         Toast.makeText(this, pesan, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v == btnSelanjutnya) {
-            if (cekNomor()) {
-                layoutInputKode.setVisibility(View.VISIBLE);
-                layoutInputNomor.setVisibility(View.GONE);
-                presenter.requestCode(phoneNumber);
-            }
-        } else if (v == btnEditNomor) {
-            layoutInputKode.setVisibility(View.GONE);
-            layoutInputNomor.setVisibility(View.VISIBLE);
-        } else if (v == btnKirimUlangKode) {
+    @OnClick(R.id.btn_selanjutnya)
+    public void onBtnSelanjutnyaClicked(View view) {
+        if (cekNomor()) {
+            layoutInputKode.setVisibility(View.VISIBLE);
+            layoutInputNomor.setVisibility(View.GONE);
             presenter.requestCode(phoneNumber);
-        } else if (v == btnSubmit) {
-            String code = inputKodeVerifikasi.getText().toString();
-            presenter.signIn(code);
         }
+    }
+
+    @OnClick(R.id.btn_submit)
+    public void onBtnSubmitClicked() {
+        String code = inputKodeVerifikasi.getText().toString();
+        presenter.signIn(code);
+    }
+
+    @OnClick(R.id.btn_kirim_ulang_kode)
+    public void onBtnKirimUlangKodeClicked() {
+        presenter.requestCode(phoneNumber);
+    }
+
+    @OnClick(R.id.btn_edit_nomor)
+    public void onViewClicked() {
+        layoutInputKode.setVisibility(View.GONE);
+        layoutInputNomor.setVisibility(View.VISIBLE);
     }
 }

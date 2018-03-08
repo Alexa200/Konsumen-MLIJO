@@ -9,21 +9,22 @@
             android:icon="@drawable/ic_home_black_24dp"
             android:title="Dashboard" />
         <item
-            android:id="@+id/kelola_produk"
-            android:icon="@drawable/ic_store_black_24dp"
-            android:title="Kelola Produk" />
-        <item
-            android:id="@+id/kelola_penjualan"
-            android:icon="@drawable/ic_assignment_black_24dp"
-            android:title="Kelola Penjualan" />
+            android:id="@+id/kelola_pembelian"
+            android:icon="@drawable/ic_shopping_cart_black_24dp"
+            android:title="Kelola Pembelian" />
         <item
             android:id="@+id/info_harga"
             android:icon="@drawable/ic_show_chart_black_24dp"
             android:title="Informasi Harga" />
         <item
-            android:id="@+id/pesan"
+            android:id="@+id/lokasi_penjual"
+            android:icon="@drawable/ic_map_black_24dp"
+            android:title="Lokasi Penjual" />
+
+        <item
+            android:id="@+id/obrolan"
             android:icon="@drawable/ic_message_black_24dp"
-            android:title="Pesan" />
+            android:title="Daftar Obrolan" />
         <item
             android:id="@+id/ulasan"
             android:icon="@drawable/ic_rate_review_black_24dp"

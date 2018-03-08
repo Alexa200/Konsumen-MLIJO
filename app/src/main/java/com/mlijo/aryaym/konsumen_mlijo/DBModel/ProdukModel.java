@@ -18,23 +18,6 @@ public class ProdukModel implements Serializable {
 
     public ProdukModel(){}
 
-    public ProdukModel(String idProduk, String idKategori){
-        this.idProduk = idProduk;
-        this.idKategori = idKategori;
-    }
-
-    public ProdukModel(String idPenjual, String namaProduk, String idKategori, ArrayList<String> gambarProduk, Double hargaProduk, String digitSatuan, String namaSatuan, String deskripsiProduk, String idProduk) {
-        this.idPenjual = idPenjual;
-        this.namaProduk = namaProduk;
-        this.idKategori = idKategori;
-        this.gambarProduk = gambarProduk;
-        this.hargaProduk = hargaProduk;
-        this.digitSatuan = digitSatuan;
-        this.namaSatuan = namaSatuan;
-        this.deskripsiProduk = deskripsiProduk;
-        this.idProduk = idProduk;
-    }
-
     public Long getWaktuDibuat() {
         return waktuDibuat;
     }

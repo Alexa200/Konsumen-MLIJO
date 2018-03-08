@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,11 +47,26 @@ public class KategoriFilterDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.custom_dialog_filter_kategori, container, false);
         // get range seekbar container
-        CrystalRangeSeekbar rangeSeekbarHarga = rootView.findViewById(R.id.rangeSeekbar1);
+        final CrystalRangeSeekbar rangeSeekbarHarga = rootView.findViewById(R.id.rangeSeekbar1);
         hargaMinimum = rootView.findViewById(R.id.harga_awal);
         hargaMaksimum = rootView.findViewById(R.id.harga_akhir);
 
-        //hargaMinimum.addTextChangedListener(new CurrencyTextWatcher());
+//        hargaMinimum.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                rangeSeekbarHarga.setMinStartValue(50001).apply();
+//            }
+//        });
 
         rangeSeekbarHarga.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
             @Override
@@ -68,28 +81,11 @@ public class KategoriFilterDialogFragment extends DialogFragment {
                 }
             }
         });
+//        rangeSeekbarHarga.setMinStartValue((float) hargaMin)
+//                .setMaxStartValue((float) hargaMax).apply();  // error
+
         unbinder = ButterKnife.bind(this, rootView);
         return rootView;
-    }
-
-    class CurrencyTextWatcher implements TextWatcher{
-
-        //boolean mEditt //pending dulu
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-
-        }
     }
 
     @Override
@@ -134,14 +130,34 @@ public class KategoriFilterDialogFragment extends DialogFragment {
         }
     }
 
+    private double getHargaMin(){
+        double selectedMin = 0;
+        try {
+            selectedMin = hargaMinimum.getCurrencyDouble();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return selectedMin;
+    }
+
+    private double getHargaMax(){
+        double selectedMax = 0;
+        try {
+            selectedMax = hargaMaksimum.getCurrencyDouble();
+        }catch (ParseException e){
+
+        }
+        return selectedMax;
+    }
+
     public FilterProduk getFilterProduk() {
         FilterProduk filterProduk = new FilterProduk();
 
         if (rootView != null) {
             filterProduk.setKategori(DaftarProdukActivity.kategori());
             filterProduk.setLokasi(getSelectedLokasi());
-            filterProduk.setHarga_awal(hargaMin);
-            filterProduk.setHarga_akhir(hargaMax);
+            filterProduk.setHarga_awal(getHargaMin());
+            filterProduk.setHarga_akhir(getHargaMax());
         }
 
         return filterProduk;

@@ -1,6 +1,6 @@
 package com.mlijo.aryaym.konsumen_mlijo.Base;
 
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.database.DatabaseReference;
 import com.mlijo.aryaym.konsumen_mlijo.Utils.Constants;
 
 import java.util.HashMap;
@@ -25,9 +25,9 @@ public class DeviceToken {
         return instance;
     }
 
-    public void addDeviceToken(FirebaseFirestore mFirestore, String token) {
+    public void addDeviceToken(DatabaseReference mDatabase, String uid, String token) {
         Map<String, Object> myMap = new HashMap<>();
         myMap.put(Constants.DEVICE_TOKEN, token);
-        mFirestore.collection("User").document("Konsumen").collection(BaseActivity.getUid()).document(Constants.DETAIL_KONSUMEN).update(myMap);
+        mDatabase.child(Constants.KONSUMEN).child(uid).updateChildren(myMap);
     }
 }

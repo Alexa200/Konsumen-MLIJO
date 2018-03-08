@@ -27,8 +27,29 @@
         <item name="android:layout_marginBottom">4dp</item>
     </style>
 
+    <style name="AppTheme.CheckedTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:paddingRight">20dp</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!--customize rating bar-->
+    <style name="customRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:minHeight">20dp</item>
+        <item name="android:maxHeight">20dp</item>
+    </style>
+
+    <style name="myRatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/ratingBarActived</item>
+        <item name="colorControlActivated">@color/ratingBarActived</item>
+    </style>
 
 </resources>

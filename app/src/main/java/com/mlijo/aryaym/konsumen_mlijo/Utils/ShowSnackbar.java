@@ -1,11 +1,13 @@
 package com.mlijo.aryaym.konsumen_mlijo.Utils;
 
+import android.app.Activity;
+
 /**
  * Created by buivu on 23/03/2017.
  */
 
 public class ShowSnackbar {
-//    public static void showSnack(Activity activity, String mess) {
+    public static void showSnack(Activity activity, String mess) {
 //        if (activity != null) {
 //            Snackbar snackbar = Snackbar.make(activity.findViewById(R.id.activity), mess, Snackbar.LENGTH_LONG);
 //            View sbView = snackbar.getView();
@@ -13,5 +15,5 @@ public class ShowSnackbar {
 //            txtMess.setTextColor(Color.WHITE);
 //            snackbar.show();
 //        }
-//    }
+    }
 }

@@ -1,6 +1,7 @@
 package com.mlijo.aryaym.konsumen_mlijo.Penjual;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,9 +52,11 @@ public class DaftarPenjualAdapter extends RecyclerView.Adapter<DaftarPenjualAdap
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        Intent intent = new Intent(activity, DetailPenjualActivity.class);
-//                        intent.putExtra(Constants.PENJUAL_MODEL, penjualModel);
-//                        activity.startActivity(intent);
+                        Intent intent = new Intent(activity, DetailPenjualActivity.class);
+                        intent.putExtra(Constants.ID_PENJUAL, penjualModel.getUid());
+                        intent.putExtra(Constants.AVATAR, penjualModel.getDetailPenjual().get(Constants.AVATAR).toString());
+                        intent.putExtra(Constants.NAMA, penjualModel.getDetailPenjual().get(Constants.NAMA).toString());
+                        activity.startActivity(intent);
                     }
                 });
                 holder.txtHariOperasional.setText(penjualModel.getInfoLokasi()

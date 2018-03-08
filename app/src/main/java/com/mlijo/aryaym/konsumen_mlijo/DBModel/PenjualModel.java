@@ -9,11 +9,13 @@ import java.util.HashMap;
 public class PenjualModel {
 
     private String uid;
-    private String deviceToken;
+    private String deviceToken, namaKategori;
     private HashMap<String, Object> infoKategori;
     private HashMap<String, Object> infoLokasi;
     private HashMap<String, Object> detailPenjual;
+    private HashMap<String, Object> kategori;
     private boolean statusBerjualan;
+    private int nilaiKategori;
 
     public PenjualModel(){}
 
@@ -43,5 +45,18 @@ public class PenjualModel {
 
     public boolean isStatusBerjualan() {
         return statusBerjualan;
+    }
+
+    public HashMap<String, Object> getKategori() {
+        return kategori;
+    }
+
+    public String getNamaKategori() {
+        return namaKategori;
+    }
+
+    public int getNilaiKategori() {
+
+        return nilaiKategori;
     }
 }

@@ -46,7 +46,7 @@ public class TabProdukFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         final View view = inflater.inflate(R.layout.fragment_tab_produk,container,false);
         ButterKnife.bind(this, view);
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        FloatingActionButton fab = view.findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -58,9 +58,9 @@ public class TabProdukFragment extends Fragment {
 
         for (int i=0; i<produkImg.length; i++)
             produkArray.add(produkImg[i]);
-        mViewPager = (ViewPager) view.findViewById(R.id.imagePager);
+        mViewPager = view.findViewById(R.id.imagePager);
         mViewPager.setAdapter(new AdapterImageSlider(this.getActivity(), produkArray));
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabDots);
+        TabLayout tabLayout = view.findViewById(R.id.tabDots);
         tabLayout.setupWithViewPager(mViewPager, true);
         //start pager
         final Handler handler = new Handler();

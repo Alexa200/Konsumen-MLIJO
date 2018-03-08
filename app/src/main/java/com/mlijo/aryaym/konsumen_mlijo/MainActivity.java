@@ -21,13 +21,27 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.mlijo.aryaym.konsumen_mlijo.Autentifikasi.AutentifikasiTeleponActivity;
+import com.mlijo.aryaym.konsumen_mlijo.Bantuan.BantuanFragment;
+import com.mlijo.aryaym.konsumen_mlijo.Base.BaseActivity;
 import com.mlijo.aryaym.konsumen_mlijo.Base.DeviceToken;
+import com.mlijo.aryaym.konsumen_mlijo.Base.ImageLoader;
 import com.mlijo.aryaym.konsumen_mlijo.Base.InternetConnection;
+import com.mlijo.aryaym.konsumen_mlijo.DBModel.KonsumenModel;
 import com.mlijo.aryaym.konsumen_mlijo.Dashboard.DashboardFragment;
+import com.mlijo.aryaym.konsumen_mlijo.KelolaPembelian.KelolaPembelianFragment;
+import com.mlijo.aryaym.konsumen_mlijo.Obrolan.DaftarObrolanFragment;
+import com.mlijo.aryaym.konsumen_mlijo.Pengaturan.PengaturanFragment;
+import com.mlijo.aryaym.konsumen_mlijo.Pengaturan.ProfilFragment;
+import com.mlijo.aryaym.konsumen_mlijo.Ulasan.DaftarUlasanFragment;
+import com.mlijo.aryaym.konsumen_mlijo.Utils.Constants;
+import com.thefinestartist.finestwebview.FinestWebView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -41,24 +55,23 @@ public class MainActivity extends AppCompatActivity
     private View headerView;
     private boolean exit = false;
     private DatabaseReference mDatabase;
-    private FirebaseFirestore mFirestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mFirestore = FirebaseFirestore.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         initViews();
@@ -77,7 +90,7 @@ public class MainActivity extends AppCompatActivity
                 linearLayout.setVisibility(View.VISIBLE);
             } else {
                 String token = FirebaseInstanceId.getInstance().getToken();
-                DeviceToken.getInstance().addDeviceToken(mFirestore,  token);
+                DeviceToken.getInstance().addDeviceToken(mDatabase, BaseActivity.getUid(),  token);
                 dataUserDrawer();
             }
         } else {
@@ -95,71 +108,85 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void dataUserDrawer(){
-//        progressBar.setVisibility(View.VISIBLE);
-//        linearLayout.setVisibility(View.GONE);
-//        mDatabase.child(Constants.KONSUMEN).child(BaseActivity.getUid()).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                KonsumenModel konsumenModel = dataSnapshot.getValue(KonsumenModel.class);
-//                if (konsumenModel != null) {
-//                    try {
-//                        txtUsername.setText(konsumenModel.getDetailKonsumen().get(Constants.NAMA).toString());
-//                        ImageLoader.getInstance().loadImageAvatar(MainActivity.this, konsumenModel.getDetailKonsumen().get(Constants.AVATAR).toString(), imgAvatar);
-//                        txtUserEmail.setText(konsumenModel.getEmail());
-//                    }catch (Exception e){
-//
-//                    }
-//                }
-//                progressBar.setVisibility(View.GONE);
-//                linearLayout.setVisibility(View.VISIBLE);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
+        mDatabase.child(Constants.KONSUMEN).child(BaseActivity.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                KonsumenModel konsumenModel = dataSnapshot.getValue(KonsumenModel.class);
+                if (konsumenModel != null) {
+                    try {
+                        txtUsername.setText(konsumenModel.getDetailKonsumen().get(Constants.NAMA).toString());
+                        ImageLoader.getInstance().loadImageAvatar(MainActivity.this, konsumenModel.getDetailKonsumen().get(Constants.AVATAR).toString(), imgAvatar);
+                        txtUserEmail.setText(konsumenModel.getEmail());
+                    }catch (Exception e){
+
+                    }
+                    progressBar.setVisibility(View.GONE);
+                    linearLayout.setVisibility(View.VISIBLE);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void initViews(){
-//        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        headerView = navigationView.getHeaderView(0);
-//        imgAvatar = (ImageView) headerView.findViewById(R.id.img_avatar);
-//        txtUsername = (TextView) headerView.findViewById(R.id.txt_header_name);
-//        txtUserEmail = (TextView) headerView.findViewById(R.id.txt_header_email);
-//        progressBar = (ProgressBar) headerView.findViewById(R.id.progress_bar);
-//        linearLayout = (LinearLayout) headerView.findViewById(R.id.linear_contain);
-//        imgAvatar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (FirebaseAuth.getInstance().getCurrentUser() != null){
-//                    ProfilFragment profilFragment = new ProfilFragment();
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, profilFragment).commit();
-//                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                    drawer.closeDrawer(GravityCompat.START);
-//                }
-//            }
-//        });
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        headerView = navigationView.getHeaderView(0);
+        imgAvatar = headerView.findViewById(R.id.img_avatar);
+        txtUsername = headerView.findViewById(R.id.txt_header_name);
+        txtUserEmail = headerView.findViewById(R.id.txt_header_email);
+        progressBar = headerView.findViewById(R.id.progress_bar);
+        linearLayout = headerView.findViewById(R.id.linear_contain);
+        imgAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (FirebaseAuth.getInstance().getCurrentUser() != null){
+                    ProfilFragment profilFragment = new ProfilFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, profilFragment).commit();
+                    DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                    drawer.closeDrawer(GravityCompat.START);
+                }
+            }
+        });
     }
 
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        int count = getFragmentManager().getBackStackEntryCount();
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
-        new AlertDialog.Builder(this)
-                .setMessage("Apa anda ingin keluar aplikasi?")
-                .setCancelable(false)
-                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        exit = true;
-                        finish();
-                    }
-                })
-                .setNegativeButton("Tidak", null)
-                .show();
+        if (count == 0){
+           // super.onBackPressed();
+            new AlertDialog.Builder(this)
+                    .setMessage("Apa anda ingin keluar aplikasi?")
+                    .setCancelable(false)
+                    .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            exit = true;
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("Tidak", null)
+                    .show();
+        }else {
+            getFragmentManager().popBackStack();
+        }
+//        new AlertDialog.Builder(this)
+//                .setMessage("Apa anda ingin keluar aplikasi?")
+//                .setCancelable(false)
+//                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        exit = true;
+//                        finish();
+//                    }
+//                })
+//                .setNegativeButton("Tidak", null)
+//                .show();
     }
 
     @Override
@@ -194,39 +221,39 @@ public class MainActivity extends AppCompatActivity
                 DashboardFragment dashboardFragment = new DashboardFragment();
                 transaction.replace(R.id.main_fragment_container, dashboardFragment).commit();
                 break;
-//            case R.id.kelola_produk:
-//                KelolaProdukFragment kelolaProdukFragment = new KelolaProdukFragment();
-//                transaction.addToBackStack(KelolaProdukFragment.class.getName());
-//                transaction.replace(R.id.main_fragment_container, kelolaProdukFragment).commit();
+            case R.id.kelola_pembelian:
+                KelolaPembelianFragment kelolaPembelianFragment = new KelolaPembelianFragment();
+                transaction.addToBackStack(KelolaPembelianFragment.class.getName());
+                transaction.replace(R.id.main_fragment_container, kelolaPembelianFragment).commit();
+                break;
+            case R.id.info_harga:
+                infoHarga();
+                break;
+//            case R.id.lokasi_penjual:
+//                Intent intentLokasi = new Intent(this, LokasiPenjualActivity.class);
+//                startActivity(intentLokasi);
 //                break;
-//            case R.id.kelola_penjualan:
-//                KelolaPenjualanFragment kelolaPenjualanFragment = new KelolaPenjualanFragment();
-//                transaction.addToBackStack(KelolaPenjualanFragment.class.getName());
-//                transaction.replace(R.id.main_fragment_container, kelolaPenjualanFragment).commit();
-//                break;
-//            case R.id.info_harga:
-//                infoHarga();
-//                break;
-//            case R.id.pesan:
-//                DaftarObrolanFragment daftarObrolanFragment = new DaftarObrolanFragment();
-//                transaction.addToBackStack(DaftarObrolanFragment.class.getName());
-//                transaction.replace(R.id.main_fragment_container, daftarObrolanFragment).commit();
-//                break;
-//            case R.id.ulasan:
-//                DaftarUlasanFragment daftarUlasanFragment = new DaftarUlasanFragment();
-//                transaction.addToBackStack(DaftarUlasanFragment.class.getName());
-//                transaction.replace(R.id.main_fragment_container, daftarUlasanFragment).commit();
-//                break;
-//            case R.id.pengaturan:
-//                PengaturanFragment pengaturanFragment = new PengaturanFragment();
-//                transaction.addToBackStack(PengaturanFragment.class.getName());
-//                transaction.replace(R.id.main_fragment_container, pengaturanFragment).commit();
-//                break;
-//            case R.id.bantuan:
-//                BantuanFragment bantuanFragment = new BantuanFragment();
-//                transaction.addToBackStack(BantuanFragment.class.getName());
-//                transaction.replace(R.id.main_fragment_container, bantuanFragment).commit();
-//                break;
+            case R.id.obrolan:
+                DaftarObrolanFragment daftarObrolanFragment = new DaftarObrolanFragment();
+                transaction.addToBackStack(DaftarObrolanFragment.class.getName());
+                transaction.replace(R.id.main_fragment_container, daftarObrolanFragment).commit();
+                break;
+            case R.id.ulasan:
+                DaftarUlasanFragment daftarUlasanFragment = new DaftarUlasanFragment();
+                transaction.addToBackStack(DaftarUlasanFragment.class.getName());
+                transaction.replace(R.id.main_fragment_container, daftarUlasanFragment).commit();
+                break;
+            case R.id.pengaturan:
+                PengaturanFragment pengaturanFragment = new PengaturanFragment();
+                transaction.addToBackStack(PengaturanFragment.class.getName());
+                //transaction.replace(R.id.main_fragment_container, pengaturanFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, pengaturanFragment).commit();
+                break;
+            case R.id.bantuan:
+                BantuanFragment bantuanFragment = new BantuanFragment();
+                transaction.addToBackStack(BantuanFragment.class.getName());
+                transaction.replace(R.id.main_fragment_container, bantuanFragment).commit();
+                break;
             case R.id.signout:
                 final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setMessage(R.string.msg_confirmLogOut)
@@ -248,11 +275,22 @@ public class MainActivity extends AppCompatActivity
                 builder.create().show();
                 break;
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    public void infoHarga(){
+        new FinestWebView.Builder(this).titleDefault("Informasi Harga")
+                .updateTitleFromHtml(false)
+                .statusBarColorRes(R.color.colorPrimaryDark)
+                .toolbarColorRes(R.color.colorPrimary)
+                .titleColorRes(R.color.finestWhite)
+                .urlColorRes(R.color.finestWhite)
+                .iconDefaultColorRes(R.color.finestWhite)
+                .progressBarColorRes(R.color.finestWhite)
+                .show("http://siskaperbapo.com/harga/tabel");
+    }
 
     private void logOut(){
         FirebaseAuth.getInstance().signOut();

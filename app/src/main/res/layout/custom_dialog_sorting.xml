@@ -1,131 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:paddingLeft="20dp"
+        android:textSize="20dp"
+        android:gravity="center_vertical"
+        android:textStyle="bold"
+        android:text="Urutkan"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/md_black_1000"></View>
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/icon_lokasi"
+            style="@style/AppTheme.FilterIcon"
+            android:layout_centerVertical="true"
+            android:tint="@color/Color_Green"
+            app:srcCompat="@drawable/ic_add_location_black_24dp" />
+
+        <CheckedTextView
+            android:id="@+id/chk_produk_terbaru"
+            style="@style/AppTheme.CheckedTextView"
+            android:gravity="center_vertical"
+            android:layout_toRightOf="@+id/icon_lokasi"
+            android:text="Produk Terbaru"
+            android:textSize="15sp"
+            android:textColor="@color/md_black_1000"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/Color_LightGrey"></View>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/icon_lokasi4"
+            style="@style/AppTheme.FilterIcon"
+            android:layout_centerVertical="true"
+            android:tint="@color/Color_Green"
+            app:srcCompat="@drawable/ic_add_location_black_24dp" />
+
+        <CheckedTextView
+            android:id="@+id/chk_nama_asc"
+            style="@style/AppTheme.CheckedTextView"
+            android:gravity="center_vertical"
+            android:layout_toRightOf="@+id/icon_lokasi4"
+            android:text="Nama: A - Z"
+            android:textSize="15sp"
+            android:textColor="@color/md_black_1000"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/Color_LightGrey"></View>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/icon_lokasi3"
+            style="@style/AppTheme.FilterIcon"
+            android:layout_centerVertical="true"
+            android:tint="@color/Color_Green"
+            app:srcCompat="@drawable/ic_add_location_black_24dp" />
+
+        <CheckedTextView
+            android:id="@+id/chk_nama_desc"
+            style="@style/AppTheme.CheckedTextView"
+            android:gravity="center_vertical"
+            android:layout_toRightOf="@+id/icon_lokasi3"
+            android:text="Nama: Z - A"
+            android:textSize="15sp"
+            android:textColor="@color/md_black_1000"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/Color_LightGrey"></View>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/icon_lokasi2"
+            style="@style/AppTheme.FilterIcon"
+            android:layout_centerVertical="true"
+            android:tint="@color/Color_Green"
+            app:srcCompat="@drawable/ic_add_location_black_24dp" />
+
+        <CheckedTextView
+            android:id="@+id/chk_harga_asc"
+            style="@style/AppTheme.CheckedTextView"
+            android:gravity="center_vertical"
+            android:layout_toRightOf="@+id/icon_lokasi2"
+            android:text="Harga Rendah ke Tinggi"
+            android:textSize="15sp"
+            android:textColor="@color/md_black_1000"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/Color_LightGrey"></View>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/icon_lokasi1"
+            style="@style/AppTheme.FilterIcon"
+            android:layout_centerVertical="true"
+            android:tint="@color/Color_Green"
+            app:srcCompat="@drawable/ic_add_location_black_24dp" />
+
+        <CheckedTextView
+            android:id="@+id/chk_harga_desc"
+            style="@style/AppTheme.CheckedTextView"
+            android:gravity="center_vertical"
+            android:layout_toRightOf="@+id/icon_lokasi1"
+            android:text="Harga Tinggi ke Rendah"
+            android:textSize="15sp"
+            android:textColor="@color/md_black_1000"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/Color_LightGrey"></View>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:background="@color/md_black_1000">
+        <Button
+            android:id="@+id/btn_sorting_ya"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:paddingLeft="20dp"
-            android:textSize="20dp"
-            android:gravity="center_vertical"
-            android:textStyle="bold"
-            android:text="Urutkan"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/md_black_1000"></View>
-        <CheckedTextView
-            android:id="@+id/chk_produk_terbaru"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="Produk Terbaru"
-            android:textSize="15sp"
-            android:textColor="@color/md_black_1000"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/Color_LightGrey"></View>
-        <CheckedTextView
-            android:id="@+id/chk_nama_asc"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="Nama: A - Z"
-            android:textSize="15sp"
-            android:textColor="@color/md_black_1000"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/Color_LightGrey"></View>
-        <CheckedTextView
-            android:id="@+id/chk_nama_desc"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="Nama: Z - A"
-            android:textSize="15sp"
-            android:textColor="@color/md_black_1000"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/Color_LightGrey"></View>
-        <CheckedTextView
-            android:id="@+id/chk_harga_asc"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="Harga Rendah ke Tinggi"
-            android:textSize="15sp"
-            android:textColor="@color/md_black_1000"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/Color_LightGrey"></View>
-        <CheckedTextView
-            android:id="@+id/chk_harga_desc"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="Harga Tinggi ke Rendah"
-            android:textSize="15sp"
-            android:textColor="@color/md_black_1000"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/Color_LightGrey"></View>
-        <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_marginRight="0.1dp"
+            android:background="@color/white"
+            android:shadowColor="@color/md_black_1000"
+            android:text="Ya"/>
+        <Button
+            android:id="@+id/btn_sorting_tidak"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@color/md_black_1000"
-            android:weightSum="2">
-            <Button
-                android:id="@+id/btn_sorting_ya"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginRight="0.1dp"
-                android:background="@color/white"
-                android:shadowColor="@color/md_black_1000"
-                android:text="Ya"/>
-            <Button
-                android:id="@+id/btn_sorting_tidak"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:shadowColor="@color/md_black_1000"
-                android:text="Tidak"/>
-        </LinearLayout>
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:shadowColor="@color/md_black_1000"
+            android:text="Tidak"/>
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

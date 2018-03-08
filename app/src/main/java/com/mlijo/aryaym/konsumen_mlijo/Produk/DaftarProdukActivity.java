@@ -1,5 +1,6 @@
 package com.mlijo.aryaym.konsumen_mlijo.Produk;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,7 +11,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -35,7 +35,8 @@ import butterknife.ButterKnife;
 public class DaftarProdukActivity extends BaseActivity implements
         View.OnClickListener,
         DaftarProdukAdapter.OnProdukListener,
-        KategoriFilterDialogFragment.KategoriFilterListener{
+        KategoriFilterDialogFragment.KategoriFilterListener,
+        SortingDialogFragment.SortingListener{
 
     @BindView(R.id.recycler_my_produk)
     RecyclerView mRecycler;
@@ -58,6 +59,7 @@ public class DaftarProdukActivity extends BaseActivity implements
     private DaftarProdukAdapter daftarProdukAdapter;
     private DaftarProdukPresenter presenter;
     private KategoriFilterDialogFragment mFilterDialog;
+    private SortingDialogFragment mSortingDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,7 +68,7 @@ public class DaftarProdukActivity extends BaseActivity implements
         ButterKnife.bind(this);
         title = getIntent().getStringExtra(Constants.TITLE);
         kategoriProduk = getIntent().getStringExtra(Constants.ID_KATEGORI);
-      //  presenter = new DaftarProdukPresenter(this);
+        presenter = new DaftarProdukPresenter(this);
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -103,6 +105,7 @@ public class DaftarProdukActivity extends BaseActivity implements
         mRecycler.setLayoutManager(new GridLayoutManager(this, 2));
         mRecycler.setAdapter(daftarProdukAdapter);
         mFilterDialog = new KategoriFilterDialogFragment();
+        mSortingDialog = new SortingDialogFragment();
         defaultDataFilter();
 
         btnSort.setOnClickListener(this);
@@ -150,7 +153,8 @@ public class DaftarProdukActivity extends BaseActivity implements
     public void onClick(View v) {
         if (v== btnSort){
             //showDialogSorting();
-            Toast.makeText(DaftarProdukActivity.this, "Masih dalam pembuatan", Toast.LENGTH_LONG).show();
+            mSortingDialog.show(getSupportFragmentManager(), SortingDialogFragment.TAG);
+            //Toast.makeText(DaftarProdukActivity.this, "Masih dalam pembuatan", Toast.LENGTH_LONG).show();
         }else if (v == btnFilter){
             mFilterDialog.show(getSupportFragmentManager(), KategoriFilterDialogFragment.TAG);
         }
@@ -158,7 +162,14 @@ public class DaftarProdukActivity extends BaseActivity implements
 
     @Override
     public void onProdukSelected(DocumentSnapshot produk) {
+        Intent intent = new Intent(this, DetailProdukActivity.class);
+        intent.putExtra(Constants.ID_PRODUK, produk.getId());
+        intent.putExtra(Constants.ID_PENJUAL, (String) produk.getData().get(Constants.ID_PENJUAL));
+        intent.putExtra(Constants.ID_KATEGORI, (String) produk.getData().get(Constants.ID_KATEGORI));
+        intent.putExtra(Constants.HARGA_PRODUK, (Long) produk.getData().get(Constants.HARGA_PRODUK));
 
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
     }
 
     private void defaultDataFilter(){
@@ -177,9 +188,8 @@ public class DaftarProdukActivity extends BaseActivity implements
 
         if (filterProduk.hasKategori()){
             query = query.whereEqualTo(Constants.ID_KATEGORI, filterProduk.getKategori());
-//            query = query.whereGreaterThan(Constants.HARGA_PRODUK, filterProduk.getHarga_awal());
-//            query = query.whereLessThan(Constants.HARGA_PRODUK, filterProduk.getHarga_akhir());
         }
+        //Log.d("nilai Harga Awal", "Current value: " + filterProduk.getKategori());
         if (filterProduk.hasLokasi()){
             query = query.whereEqualTo(Constants.ID_LOKASI, filterProduk.getLokasi());
         }
@@ -187,6 +197,25 @@ public class DaftarProdukActivity extends BaseActivity implements
         Log.d("nilai Harga Awal", "Current value: " + filterProduk.getHarga_awal());
         query = query.whereLessThan(Constants.HARGA_PRODUK, filterProduk.getHarga_akhir());
         Log.d("nilai Harga Akhir", "Current value: " + filterProduk.getHarga_akhir());
+
+        query = query.limit(10);
+
+        daftarProdukAdapter.setQuery(query);
+
+        presenter.setFilters(filterProduk);
+    }
+
+    @Override
+    public void onSorting(FilterProduk sortingProduk) {
+
+        Query query = mFirestore.collection(Constants.PRODUK_REGULER);
+
+        if (sortingProduk.hasKategori()){
+            query = query.whereEqualTo(Constants.ID_KATEGORI, sortingProduk.getKategori());
+        }
+        Log.d("nilai Harga Awal", "Current value: " + sortingProduk.getKategori());
+
+        query = query.orderBy(sortingProduk.getSortBy(), sortingProduk.getSortDirection());
 
         query = query.limit(10);
 

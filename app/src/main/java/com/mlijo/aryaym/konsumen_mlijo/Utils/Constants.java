@@ -1,5 +1,7 @@
 package com.mlijo.aryaym.konsumen_mlijo.Utils;
 
+import android.Manifest;
+
 /**
  * Created by AryaYM on 17/08/2017.
  */
@@ -30,7 +32,6 @@ public class Constants {
     public static final String DEVICE_TOKEN = "deviceToken";
     public static final String JUDUL_ALAMAT = "judulAlamat";
     public static final String ALAMAT = "alamat";
-    public static final String NAMA_PENERIMA = "namaPenerima";
     public static final String ID_ALAMAT = "idAlamat";
     public static final String ALAMAT_USER = "alamatUser";
     public static final String DETAIL_KONSUMEN = "detailKonsumen";
@@ -81,7 +82,7 @@ public class Constants {
     public static final String DIGITSATUAN = "digitSatuan";
     public static final String NAMASATUAN = "namaSatuan";
     public static final String TRANSAKSI = "transaksi";
-    public static final String TIPE_TRANSAKSI = "tipeTransaksi";
+    public static final String JENIS_PRODUK = "jenisProduk";
     public static final String STATUS_TRANSAKSI = "statusTransaksi";
     public static final String PENJUALAN = "penjualan";
     public static final String PENJUALAN_BARU = "penjualanBaru";
@@ -93,11 +94,11 @@ public class Constants {
     public static final String RIWAYAT_TRANSAKSI = "riwayatTransaksi";
     public static final String ID_PENJUAL = "idPenjual";
     public static final String ID_KONSUMEN = "idKonsumen";
-    public static final String ID_PEMESANAN = "idPemesanan";
+    public static final String ID_TRANSAKSI = "idTransaksi";
     public static final String NOTE_KONSUMEN = "catatanKonsumen";
-    public static final String JUMLAH_PRODUK = "jumlahProduk";
+    public static final String JUMLAH_ORDER_PRODUK = "jumlahOrderProduk";
     public static final String JUMLAH_HARGA_PRODUK = "totalHarga";
-    public static final String PENERIMA = "penerima";
+    public static final String NAMA_PENERIMA = "namaPenerima";
     public static final String BIAYA_KIRIM = "biayaKirim";
     public static final String TANGGAL_KIRIM = "tanggalKirim";
     public static final String WAKTU_KIRIM = "waktuKirim";
@@ -105,8 +106,8 @@ public class Constants {
     public static final String OBROLAN = "obrolan";
     public static final String KONTEN = "konten";
     public static final String KONTEN_FOTO = "kontenFoto";
-    public static final String MILIKKU = "kontenMilikku";
-    public static final String PENGIRIM = "pengirim";
+    public static final String KONTEN_PENGIRIM = "kontenPengirim";
+    public static final String ID_PENGIRIM = "idPengirim";
     public static final String TIMESTAMP = "timestamp";
     public static final String ID_PENERIMA = "idPenerima";
     //Status List
@@ -130,4 +131,15 @@ public class Constants {
     public static final int GALLERY_INTENT = 2;
     public static final int CAMERA_INTENT = 3;
     public static String USER_FILE_PATH = null;
+    public static final int REQUEST_CODE_READ_EXTERNAL_STORAGE = 1001;
+    public static final String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE
+    };
+    public static final int REQUEST_CODE_CAMERA = 1002;
+    public static final String[] PERMISSIONS_CAMERA = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+    public static int RESULT_LOAD_IMAGE = 1;
+    public static final int REQUEST_CODE_READ_STORAGE = 1001;
 }

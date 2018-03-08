@@ -39,9 +39,8 @@ public class TabPenjualFragment extends Fragment {
 
     private static final String TAG = "TabPenjualFragment";
 
-    private List<PenjualModel> penjualList = new ArrayList<>();
-    private DaftarPenjualAdapter daftarPenjualAdapter;
-    private ArrayList<Integer> penjualArray = new ArrayList<Integer>();
+    public List<PenjualModel> penjualList = new ArrayList<>();
+    public DaftarPenjualAdapter daftarPenjualAdapter;
     private DaftarPenjualPresenter presenter;
     private DatabaseReference mDatabase;
 
@@ -52,40 +51,38 @@ public class TabPenjualFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         presenter = new DaftarPenjualPresenter(this);
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        //loadDataPenjual();
-        loadData();
+
         daftarPenjualAdapter = new DaftarPenjualAdapter(this.getActivity(), penjualList);
         mRecycler.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         mRecycler.setAdapter(daftarPenjualAdapter);
         return view;
     }
+    @Override
+    public void onStart(){
+        super.onStart();
 
-    private void loadData() {
         presenter.loadDataPenjual();
-        //presenter.loadPenjual();
     }
-
-//    @Override
-//    public void onStart(){
-//        super.onStart();
-//
-//        if (daftarPenjualAdapter != null){
-//            daftarPenjualAdapter.loadDataPenjual();
-//        }
-//    }
 
     public void showItemData(PenjualModel penjualModel) {
         progressBar.setVisibility(View.GONE);
         mRecycler.setVisibility(View.VISIBLE);
-        imgNoResult.setVisibility(View.GONE);
-        penjualList.add(penjualModel);
-        daftarPenjualAdapter.notifyDataSetChanged();
+       // imgNoResult.setVisibility(View.GONE);
+        if (penjualList.contains(penjualModel)){
+            penjualList.clear();
+        }else {
+            penjualList.add(penjualModel);
+            daftarPenjualAdapter.notifyDataSetChanged();
+        }
     }
 
     public void hideItemData() {
-        progressBar.setVisibility(View.VISIBLE);
-        mRecycler.setVisibility(View.GONE);
-        imgNoResult.setVisibility(View.GONE);
+        //progressBar.setVisibility(View.VISIBLE);
+//        mRecycler.setVisibility(View.GONE);
+//        imgNoResult.setVisibility(View.GONE);
+        if (penjualList != null){
+            penjualList.clear();
+        }
     }
     public void tidakAdaPenjual() {
         progressBar.setVisibility(View.GONE);

@@ -1,18 +1,23 @@
 package com.mlijo.aryaym.konsumen_mlijo.Produk;
 
-import android.app.DialogFragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
+import android.widget.ListView;
 
+import com.google.firebase.firestore.Query;
 import com.mlijo.aryaym.konsumen_mlijo.R;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -21,202 +26,224 @@ import butterknife.Unbinder;
 
 public class SortingDialogFragment extends DialogFragment {
 
-    @BindView(R.id.chk_produk_terbaru)
-    CheckedTextView chkProdukTerbaru;
-    @BindView(R.id.chk_nama_asc)
-    CheckedTextView chkNamaAsc;
-    @BindView(R.id.chk_nama_desc)
-    CheckedTextView chkNamaDesc;
-    @BindView(R.id.chk_harga_asc)
-    CheckedTextView chkHargaAsc;
-    @BindView(R.id.chk_harga_desc)
-    CheckedTextView chkHargaDesc;
-    @BindView(R.id.btn_sorting_ya)
-    Button btnSortingYa;
-    @BindView(R.id.btn_sorting_tidak)
-    Button btnSortingTidak;
+    public static final String TAG = "SortingDialog";
+    interface SortingListener {
+        void onSorting(FilterProduk sortingProduk);
+    }
+
     Unbinder unbinder;
+    //@BindView(R.id.listview_sorting)
+    private SortingListener mSortingListener;
+    ListView listviewSorting;
     private View rootView;
+    private BaseAdapter adapter;
+    String[] sortArray = {
+            "John Cena", "Randy Orton", "Triple H", "Roman Reign", "Sheamus"};
+    private int mLastCorrectPosition = -1;
+    private int mButtonPosition = -1;
+    private String query;
+    private Query.Direction queryDirection;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.custom_dialog_sorting, container, false);
+        // sortArray = getResources().getStringArray(R.array.arrKecamatan);
+//        listviewSorting = rootView.findViewById(R.id.listview_sorting);
+//        listviewSorting.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+//        adapter = new ArrayAdapter<String>(this.getActivity(),
+//                android.R.layout.simple_list_item_checked, sortArray);
+//        getData();
+        showDialogSorting();
         unbinder = ButterKnife.bind(this, rootView);
         return rootView;
     }
 
+    private void getData() {
+        listviewSorting.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                if (position == mButtonPosition) {
+                    if (mLastCorrectPosition != -1) {
+                        listviewSorting.setItemChecked(mLastCorrectPosition, true);
+                    } else {
+                        listviewSorting.setItemChecked(mButtonPosition, false);
+                    }
+                    // here show dialog
+                } else {
+                    mLastCorrectPosition = position;
+                    // here refresh fragment
+                    Log.d("nilai", "" + sortArray[position]);
+                }
+            }
+        });
+    }
 
-//    private void showDialogSorting(){
-//        final Dialog dialog = new Dialog(DaftarProdukActivity.this);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setContentView(R.layout.custom_dialog_sorting);
-//
-//        final CheckedTextView produkTerbaru = (CheckedTextView) dialog.findViewById(R.id.chk_produk_terbaru);
-//        final CheckedTextView namaASC = (CheckedTextView) dialog.findViewById(R.id.chk_nama_asc);
-//        final CheckedTextView namaDESC = (CheckedTextView) dialog.findViewById(R.id.chk_nama_desc);
-//        final CheckedTextView hargaASC = (CheckedTextView) dialog.findViewById(R.id.chk_harga_asc);
-//        final CheckedTextView hargaDESC = (CheckedTextView) dialog.findViewById(R.id.chk_harga_desc);
-//        Button btnYa = (Button) dialog.findViewById(R.id.btn_sorting_ya);
-//        Button btnTidak = (Button) dialog.findViewById(R.id.btn_sorting_tidak);
-//
-//        produkTerbaru.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (produkTerbaru.isChecked()){
-//                    produkTerbaru.setChecked(false);
-//                    produkTerbaru.setCheckMarkDrawable(null);
-//                }else {
-//                    queryData = "terbaru";
-//                    produkTerbaru.setChecked(true);
-//                    produkTerbaru.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
-//                    namaASC.setChecked(false);
-//                    namaASC.setCheckMarkDrawable(null);
-//                    namaDESC.setChecked(false);
-//                    namaDESC.setCheckMarkDrawable(null);
-//                    hargaASC.setChecked(false);
-//                    hargaASC.setCheckMarkDrawable(null);
-//                    hargaDESC.setChecked(false);
-//                    hargaDESC.setCheckMarkDrawable(null);
-//                }
-//            }
-//        });
-//        namaASC.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (namaASC.isChecked()){
-//                    namaASC.setChecked(false);
-//                    namaASC.setCheckMarkDrawable(null);
-//                }else {
-//                    queryData = "namaProdukASC";
-//                    namaASC.setChecked(true);
-//                    namaASC.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
-//                    produkTerbaru.setChecked(false);
-//                    produkTerbaru.setCheckMarkDrawable(null);
-//                    namaDESC.setChecked(false);
-//                    namaDESC.setCheckMarkDrawable(null);
-//                    hargaASC.setChecked(false);
-//                    hargaASC.setCheckMarkDrawable(null);
-//                    hargaDESC.setChecked(false);
-//                    hargaDESC.setCheckMarkDrawable(null);
-//                }
-//            }
-//        });
-//        namaDESC.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (namaDESC.isChecked()){
-//                    namaDESC.setChecked(false);
-//                    namaDESC.setCheckMarkDrawable(null);
-//                }else {
-//                    queryData = "namaProdukDESC";
-//                    namaDESC.setChecked(true);
-//                    namaDESC.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
-//                    produkTerbaru.setChecked(false);
-//                    produkTerbaru.setCheckMarkDrawable(null);
-//                    namaASC.setChecked(false);
-//                    namaASC.setCheckMarkDrawable(null);
-//                    hargaASC.setChecked(false);
-//                    hargaASC.setCheckMarkDrawable(null);
-//                    hargaDESC.setChecked(false);
-//                    hargaDESC.setCheckMarkDrawable(null);
-//                }
-//            }
-//        });
-//        hargaASC.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (hargaASC.isChecked()){
-//                    hargaASC.setChecked(false);
-//                    hargaASC.setCheckMarkDrawable(null);
-//                }else {
-//                    queryData = "hargaProdukASC";
-//                    hargaASC.setChecked(true);
-//                    hargaASC.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
-//                    produkTerbaru.setChecked(false);
-//                    produkTerbaru.setCheckMarkDrawable(null);
-//                    namaASC.setChecked(false);
-//                    namaASC.setCheckMarkDrawable(null);
-//                    namaDESC.setChecked(false);
-//                    namaDESC.setCheckMarkDrawable(null);
-//                    hargaDESC.setChecked(false);
-//                    hargaDESC.setCheckMarkDrawable(null);
-//                }
-//            }
-//        });
-//        hargaDESC.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (hargaDESC.isChecked()){
-//                    hargaDESC.setChecked(false);
-//                    hargaDESC.setCheckMarkDrawable(null);
-//                }else {
-//                    queryData = "hargaProdukDESC";
-//                    hargaDESC.setChecked(true);
-//                    hargaDESC.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
-//                    produkTerbaru.setChecked(false);
-//                    produkTerbaru.setCheckMarkDrawable(null);
-//                    namaASC.setChecked(false);
-//                    namaASC.setCheckMarkDrawable(null);
-//                    namaDESC.setChecked(false);
-//                    namaDESC.setCheckMarkDrawable(null);
-//                    hargaASC.setChecked(false);
-//                    hargaASC.setCheckMarkDrawable(null);
-//                }
-//            }
-//        });
+    private void showDialogSorting() {
 
-//        lyProdukTerbaru.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                chkProdukTerbaru.setVisibility(View.VISIBLE);
-//                querytext.setText("errro");
-//            }
-//        });
-//        lyNamaASC.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                chkNamaASC.setVisibility(View.VISIBLE);
-//            }
-//        });
-//        lyHargaASC.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (chkHargaASC.getVisibility() == View.INVISIBLE){
-//                    chkHargaASC.setVisibility(View.VISIBLE);
-//                //    queryData.
-//                }else if (chkHargaASC.getVisibility() != View.INVISIBLE){
-//                    chkHargaASC.setVisibility(View.INVISIBLE);
-//                }
-//            }
-//        });
+        final CheckedTextView produkTerbaru = rootView.findViewById(R.id.chk_produk_terbaru);
+        final CheckedTextView namaASC = rootView.findViewById(R.id.chk_nama_asc);
+        final CheckedTextView namaDESC = rootView.findViewById(R.id.chk_nama_desc);
+        final CheckedTextView hargaASC = rootView.findViewById(R.id.chk_harga_asc);
+        final CheckedTextView hargaDESC = rootView.findViewById(R.id.chk_harga_desc);
 
-//        btnTidak.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//            }
-//        });
-//        btnYa.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //queryData.contains(querytext.getText());
-//                Toast.makeText(dialog.getContext(), queryData, Toast.LENGTH_SHORT).show();
-//                //updateTampilanData(queryData);
-//                dialog.dismiss();
-//            }
-//        });
-//        //queryData.contains(querytext.getText());
-//
-//        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        dialog.getWindow().setGravity(Gravity.CENTER);
-//        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
-//        dialog.getWindow().setAttributes(layoutParams);
-//
-//        dialog.show();
-//    }
+        produkTerbaru.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (produkTerbaru.isChecked()) {
+                    produkTerbaru.setChecked(false);
+                    produkTerbaru.setCheckMarkDrawable(null);
+                } else {
+                    query = "waktuDibuat";
+                    queryDirection = Query.Direction.DESCENDING;
+                    produkTerbaru.setChecked(true);
+                    produkTerbaru.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
+                    namaASC.setChecked(false);
+                    namaASC.setCheckMarkDrawable(null);
+                    namaDESC.setChecked(false);
+                    namaDESC.setCheckMarkDrawable(null);
+                    hargaASC.setChecked(false);
+                    hargaASC.setCheckMarkDrawable(null);
+                    hargaDESC.setChecked(false);
+                    hargaDESC.setCheckMarkDrawable(null);
+                }
+            }
+        });
+        namaASC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (namaASC.isChecked()) {
+                    namaASC.setChecked(false);
+                    namaASC.setCheckMarkDrawable(null);
+                } else {
+                    query = "namaProduk";
+                    queryDirection = Query.Direction.ASCENDING;
+                    namaASC.setChecked(true);
+                    namaASC.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
+                    produkTerbaru.setChecked(false);
+                    produkTerbaru.setCheckMarkDrawable(null);
+                    namaDESC.setChecked(false);
+                    namaDESC.setCheckMarkDrawable(null);
+                    hargaASC.setChecked(false);
+                    hargaASC.setCheckMarkDrawable(null);
+                    hargaDESC.setChecked(false);
+                    hargaDESC.setCheckMarkDrawable(null);
+                }
+            }
+        });
+        namaDESC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (namaDESC.isChecked()) {
+                    namaDESC.setChecked(false);
+                    namaDESC.setCheckMarkDrawable(null);
+                } else {
+                    query = "namaProduk";
+                    queryDirection = Query.Direction.DESCENDING;
+                    namaDESC.setChecked(true);
+                    namaDESC.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
+                    produkTerbaru.setChecked(false);
+                    produkTerbaru.setCheckMarkDrawable(null);
+                    namaASC.setChecked(false);
+                    namaASC.setCheckMarkDrawable(null);
+                    hargaASC.setChecked(false);
+                    hargaASC.setCheckMarkDrawable(null);
+                    hargaDESC.setChecked(false);
+                    hargaDESC.setCheckMarkDrawable(null);
+                }
+            }
+        });
+        hargaASC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (hargaASC.isChecked()) {
+                    hargaASC.setChecked(false);
+                    hargaASC.setCheckMarkDrawable(null);
+                } else {
+                    query = "hargaProduk";
+                    queryDirection = Query.Direction.ASCENDING;
+                    hargaASC.setChecked(true);
+                    hargaASC.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
+                    produkTerbaru.setChecked(false);
+                    produkTerbaru.setCheckMarkDrawable(null);
+                    namaASC.setChecked(false);
+                    namaASC.setCheckMarkDrawable(null);
+                    namaDESC.setChecked(false);
+                    namaDESC.setCheckMarkDrawable(null);
+                    hargaDESC.setChecked(false);
+                    hargaDESC.setCheckMarkDrawable(null);
+                }
+            }
+        });
+        hargaDESC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (hargaDESC.isChecked()) {
+                    hargaDESC.setChecked(false);
+                    hargaDESC.setCheckMarkDrawable(null);
+                } else {
+                    query = "hargaProduk";
+                    queryDirection = Query.Direction.DESCENDING;
+                    hargaDESC.setChecked(true);
+                    hargaDESC.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
+                    produkTerbaru.setChecked(false);
+                    produkTerbaru.setCheckMarkDrawable(null);
+                    namaASC.setChecked(false);
+                    namaASC.setCheckMarkDrawable(null);
+                    namaDESC.setChecked(false);
+                    namaDESC.setCheckMarkDrawable(null);
+                    hargaASC.setChecked(false);
+                    hargaASC.setCheckMarkDrawable(null);
+                }
+            }
+        });
 
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof SortingListener) {
+            mSortingListener = (SortingDialogFragment.SortingListener) context;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDialog().getWindow().setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+    }
+
+    @OnClick({R.id.btn_sorting_ya, R.id.btn_sorting_tidak})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btn_sorting_ya:
+                if (mSortingListener != null){
+                    mSortingListener.onSorting(getSortingProduk());
+                }
+                dismiss();
+                break;
+            case R.id.btn_sorting_tidak:
+                dismiss();
+                break;
+        }
+    }
+
+    public FilterProduk getSortingProduk() {
+        FilterProduk sortingProduk = new FilterProduk();
+
+        if (rootView != null) {
+            sortingProduk.setKategori(DaftarProdukActivity.kategori());
+            sortingProduk.setSortBy(query);
+            sortingProduk.setSortDirection(queryDirection);
+        }
+        return sortingProduk;
+    }
 
     @Override
     public void onDestroyView() {
