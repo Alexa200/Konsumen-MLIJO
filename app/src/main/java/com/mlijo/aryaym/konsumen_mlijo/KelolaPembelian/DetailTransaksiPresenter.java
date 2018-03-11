@@ -33,7 +33,7 @@ public class DetailTransaksiPresenter {
         this.view = view;
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirestore = FirebaseFirestore.getInstance();
-        produkRef = mFirestore.collection(view.tipeTransaksi).document(view.produkId);
+        produkRef = mFirestore.collection(view.jenisProduk).document(view.produkId);
     }
 
     public void loadDataAlamat(){

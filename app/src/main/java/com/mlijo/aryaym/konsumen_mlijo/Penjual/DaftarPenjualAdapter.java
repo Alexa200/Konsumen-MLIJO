@@ -65,7 +65,7 @@ public class DaftarPenjualAdapter extends RecyclerView.Adapter<DaftarPenjualAdap
                 holder.txtJamOperasional.setText(penjualModel.getInfoLokasi()
                         .get(Constants.JAM_MULAI).toString() + " - " + penjualModel.getInfoLokasi()
                         .get(Constants.JAM_SELESAI).toString());
-                holder.txtAreaJualan.setText(penjualModel.getUid());
+                holder.txtAreaJualan.setText(penjualModel.getInfoLokasi().get(Constants.KECAMATAN).toString());
             } catch (Exception e) {
 
             }

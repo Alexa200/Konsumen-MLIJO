@@ -2,15 +2,14 @@ package com.mlijo.aryaym.konsumen_mlijo.Penjual;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,11 +19,9 @@ import com.mlijo.aryaym.konsumen_mlijo.Base.BaseActivity;
 import com.mlijo.aryaym.konsumen_mlijo.Base.ImageLoader;
 import com.mlijo.aryaym.konsumen_mlijo.DBModel.PenjualModel;
 import com.mlijo.aryaym.konsumen_mlijo.Obrolan.ObrolanActivity;
+import com.mlijo.aryaym.konsumen_mlijo.Produk.DaftarProdukPenjualActivity;
 import com.mlijo.aryaym.konsumen_mlijo.R;
 import com.mlijo.aryaym.konsumen_mlijo.Utils.Constants;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,13 +51,41 @@ public class DetailPenjualActivity extends BaseActivity implements ValueEventLis
     Button btnPesanProduk;
     @BindView(R.id.btn_kirim_obrolan)
     Button btnKirimObrolan;
-    @BindView(R.id.kategori_penjual_list)
-    RecyclerView mRecycler;
+    @BindView(R.id.chk_sayuran)
+    CheckBox chkSayuran;
+    @BindView(R.id.ly_chk_sayuran)
+    LinearLayout lyChkSayuran;
+    @BindView(R.id.chk_buah)
+    CheckBox chkBuah;
+    @BindView(R.id.ly_chk_buah)
+    LinearLayout lyChkBuah;
+    @BindView(R.id.chk_daging)
+    CheckBox chkDaging;
+    @BindView(R.id.ly_chk_daging)
+    LinearLayout lyChkDaging;
+    @BindView(R.id.chk_ikan)
+    CheckBox chkIkan;
+    @BindView(R.id.ly_chk_ikan)
+    LinearLayout lyChkIkan;
+    @BindView(R.id.chk_palawija)
+    CheckBox chkPalawija;
+    @BindView(R.id.ly_chk_palawija)
+    LinearLayout lyChkPalawija;
+    @BindView(R.id.chk_bumbu)
+    CheckBox chkBumbu;
+    @BindView(R.id.ly_chk_bumbu)
+    LinearLayout lyChkBumbu;
+    @BindView(R.id.chk_peralatan)
+    CheckBox chkPeralatan;
+    @BindView(R.id.ly_chk_peralatan)
+    LinearLayout lyChkPeralatan;
+    @BindView(R.id.chk_lain)
+    CheckBox chkLain;
+    @BindView(R.id.ly_chk_lain)
+    LinearLayout lyChkLain;
 
     private String penjualId, avatarPenjual, namaPenjual;
     private DatabaseReference mDatabase, penjualRef;
-    private DaftarKategoriPenjualAdapter daftarKategoriPenjualAdapter;
-    private List<PenjualModel> kategoriList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,38 +103,150 @@ public class DetailPenjualActivity extends BaseActivity implements ValueEventLis
         mDatabase = FirebaseDatabase.getInstance().getReference();
         penjualRef = mDatabase.child(Constants.PENJUAL).child(penjualId);
         penjualRef.addValueEventListener(this);
-
-        daftarKategoriPenjualAdapter = new DaftarKategoriPenjualAdapter(this, kategoriList);
-        mRecycler.setLayoutManager(new GridLayoutManager(this, 2));
-        mRecycler.setAdapter(daftarKategoriPenjualAdapter);
         getRatingPenjual();
         getKategori();
 
     }
 
     private void getKategori() {
-        mDatabase.child(Constants.PENJUAL).child(penjualId).child("kategori")
-                .addChildEventListener(new ChildEventListener() {
+        mDatabase.child(Constants.PENJUAL).child(penjualId).addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        PenjualModel penjualModel = dataSnapshot.getValue(PenjualModel.class);
-                        kategoriList.add(penjualModel);
-                        daftarKategoriPenjualAdapter.notifyDataSetChanged();
-                    }
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot != null) {
+                            final PenjualModel penjualModel = dataSnapshot.getValue(PenjualModel.class);
+                            try {
+                                if (Boolean.parseBoolean(penjualModel.getInfoKategori().get(Constants.KATEGORI_SAYURAN).toString())) {
+                                    chkSayuran.setChecked(true);
+                                    lyChkSayuran.setClickable(true);
+                                    lyChkSayuran.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(DetailPenjualActivity.this, DaftarProdukPenjualActivity.class);
+                                            intent.putExtra(Constants.ID_PENJUAL, penjualModel.getUid());
+                                            intent.putExtra(Constants.ID_KATEGORI, Constants.SAYURAN);
+                                            intent.putExtra(Constants.TITLE, Constants.SAYURAN);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                } else {
+                                    chkSayuran.setChecked(false);
+                                }
+                                if (Boolean.parseBoolean(penjualModel.getInfoKategori().get(Constants.KATEGORI_BUAH).toString())) {
+                                    chkBuah.setChecked(true);
+                                    lyChkBuah.setClickable(true);
+                                    lyChkBuah.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(DetailPenjualActivity.this, DaftarProdukPenjualActivity.class);
+                                            intent.putExtra(Constants.ID_PENJUAL, penjualModel.getUid());
+                                            intent.putExtra(Constants.ID_KATEGORI, Constants.BUAH);
+                                            intent.putExtra(Constants.TITLE, Constants.BUAH);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                } else {
+                                    chkBuah.setChecked(false);
+                                }
+                                if (Boolean.parseBoolean(penjualModel.getInfoKategori().get(Constants.KATEGORI_DAGING).toString())) {
+                                    chkDaging.setChecked(true);
+                                    lyChkDaging.setClickable(true);
+                                    lyChkDaging.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(DetailPenjualActivity.this, DaftarProdukPenjualActivity.class);
+                                            intent.putExtra(Constants.ID_PENJUAL, penjualModel.getUid());
+                                            intent.putExtra(Constants.ID_KATEGORI, Constants.DAGING);
+                                            intent.putExtra(Constants.TITLE, Constants.DAGING);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                } else {
+                                    chkDaging.setChecked(false);
+                                }
+                                if (Boolean.parseBoolean(penjualModel.getInfoKategori().get(Constants.KATEGORI_IKAN).toString())) {
+                                    chkIkan.setChecked(true);
+                                    lyChkIkan.setClickable(true);
+                                    lyChkIkan.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(DetailPenjualActivity.this, DaftarProdukPenjualActivity.class);
+                                            intent.putExtra(Constants.ID_PENJUAL, penjualModel.getUid());
+                                            intent.putExtra(Constants.ID_KATEGORI, Constants.IKAN);
+                                            intent.putExtra(Constants.TITLE, Constants.IKAN);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                } else {
+                                    chkIkan.setChecked(false);
+                                }
+                                if (Boolean.parseBoolean(penjualModel.getInfoKategori().get(Constants.KATEGORI_PALAWIJA).toString())) {
+                                    chkPalawija.setChecked(true);
+                                    lyChkPalawija.setClickable(true);
+                                    lyChkPalawija.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(DetailPenjualActivity.this, DaftarProdukPenjualActivity.class);
+                                            intent.putExtra(Constants.ID_PENJUAL, penjualModel.getUid());
+                                            intent.putExtra(Constants.ID_KATEGORI, Constants.PALAWIJA);
+                                            intent.putExtra(Constants.TITLE, Constants.PALAWIJA);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                } else {
+                                    chkPalawija.setChecked(false);
+                                }
+                                if (Boolean.parseBoolean(penjualModel.getInfoKategori().get(Constants.KATEGORI_BUMBU).toString())) {
+                                    chkBumbu.setChecked(true);
+                                    lyChkBumbu.setClickable(true);
+                                    lyChkBumbu.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(DetailPenjualActivity.this, DaftarProdukPenjualActivity.class);
+                                            intent.putExtra(Constants.ID_PENJUAL, penjualModel.getUid());
+                                            intent.putExtra(Constants.ID_KATEGORI, Constants.BUMBUDAPUR);
+                                            intent.putExtra(Constants.TITLE, Constants.BUMBUDAPUR);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                } else {
+                                    chkBumbu.setChecked(false);
+                                }
+                                if (Boolean.parseBoolean(penjualModel.getInfoKategori().get(Constants.KATEGORI_PERALATAN).toString())) {
+                                    chkPeralatan.setChecked(true);
+                                    lyChkPeralatan.setClickable(true);
+                                    lyChkPeralatan.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(DetailPenjualActivity.this, DaftarProdukPenjualActivity.class);
+                                            intent.putExtra(Constants.ID_PENJUAL, penjualModel.getUid());
+                                            intent.putExtra(Constants.ID_KATEGORI, Constants.PERALATANDAPUR);
+                                            intent.putExtra(Constants.TITLE, Constants.PERALATANDAPUR);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                } else {
+                                    chkPeralatan.setChecked(false);
+                                }
+                                if (Boolean.parseBoolean(penjualModel.getInfoKategori().get(Constants.KATEGORI_LAIN).toString())) {
+                                    chkLain.setChecked(true);
+                                    lyChkLain.setClickable(true);
+                                    lyChkLain.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(DetailPenjualActivity.this, DaftarProdukPenjualActivity.class);
+                                            intent.putExtra(Constants.ID_PENJUAL, penjualModel.getUid());
+                                            intent.putExtra(Constants.ID_KATEGORI, Constants.LAINLAIN);
+                                            intent.putExtra(Constants.TITLE, Constants.LAINLAIN);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                } else {
+                                    chkLain.setChecked(false);
+                                }
+                            } catch (Exception e) {
 
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+                            }
+                        }
                     }
 
                     @Override
@@ -132,7 +269,6 @@ public class DetailPenjualActivity extends BaseActivity implements ValueEventLis
             txtHariOperasional.setText(penjualModel.getInfoLokasi().get(Constants.HARI_MULAI).toString() + " - " + penjualModel.getInfoLokasi().get(Constants.HARI_SELESAI).toString());
             txtJamOperasional.setText(penjualModel.getInfoLokasi().get(Constants.JAM_MULAI).toString() + " - " + penjualModel.getInfoLokasi().get(Constants.JAM_SELESAI).toString());
             txtKecamatan.setText(penjualModel.getInfoLokasi().get(Constants.KECAMATAN).toString());
-            mRecycler.setVisibility(View.VISIBLE);
         } catch (Exception e) {
 
         }

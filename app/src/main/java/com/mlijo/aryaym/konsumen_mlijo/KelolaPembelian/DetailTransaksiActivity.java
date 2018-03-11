@@ -76,7 +76,7 @@ public class DetailTransaksiActivity extends BaseActivity {
     TextView txtTanggalAntar;
     private DatabaseReference mDatabase;
     private TransaksiModel transaksiModel;
-    public String transaksiId, penjualId, tipeTransaksi, produkId;
+    public String transaksiId, penjualId, jenisProduk, produkId;
     private DetailTransaksiPresenter presenter;
 
     @Override
@@ -90,7 +90,7 @@ public class DetailTransaksiActivity extends BaseActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         transaksiModel = (TransaksiModel) getIntent().getSerializableExtra(Constants.TRANSAKSI);
         transaksiId = transaksiModel.getIdTransaksi();
-        tipeTransaksi = transaksiModel.getJenisProduk();
+        jenisProduk = transaksiModel.getJenisProduk();
         produkId = transaksiModel.getIdProduk();
         penjualId = transaksiModel.getIdPenjual();
 

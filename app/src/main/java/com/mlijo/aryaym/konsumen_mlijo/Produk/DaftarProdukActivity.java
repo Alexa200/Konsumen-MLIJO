@@ -166,7 +166,7 @@ public class DaftarProdukActivity extends BaseActivity implements
         intent.putExtra(Constants.ID_PRODUK, produk.getId());
         intent.putExtra(Constants.ID_PENJUAL, (String) produk.getData().get(Constants.ID_PENJUAL));
         intent.putExtra(Constants.ID_KATEGORI, (String) produk.getData().get(Constants.ID_KATEGORI));
-        intent.putExtra(Constants.HARGA_PRODUK, (Long) produk.getData().get(Constants.HARGA_PRODUK));
+        intent.putExtra(Constants.HARGA_PRODUK, (Double) produk.getData().get(Constants.HARGA_PRODUK));
 
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
@@ -213,7 +213,14 @@ public class DaftarProdukActivity extends BaseActivity implements
         if (sortingProduk.hasKategori()){
             query = query.whereEqualTo(Constants.ID_KATEGORI, sortingProduk.getKategori());
         }
-        Log.d("nilai Harga Awal", "Current value: " + sortingProduk.getKategori());
+        if (sortingProduk.hasLokasi()){
+            query = query.whereEqualTo(Constants.ID_LOKASI, sortingProduk.getLokasi());
+        }
+        Log.d("nilai kategori", "Current value: " + sortingProduk.hasKategori());
+        //query = query.whereGreaterThan(Constants.HARGA_PRODUK, sortingProduk.getHarga_awal());
+        Log.d("nilai lokasi", "Current value: " + sortingProduk.hasLokasi());
+        //query = query.whereLessThan(Constants.HARGA_PRODUK, sortingProduk.getHarga_akhir());
+        Log.d("nilai presenter", "Current value: " + presenter.getFilters());
 
         query = query.orderBy(sortingProduk.getSortBy(), sortingProduk.getSortDirection());
 

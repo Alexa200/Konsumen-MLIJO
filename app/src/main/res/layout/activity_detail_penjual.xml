@@ -82,20 +82,202 @@
                     android:orientation="vertical"
                     android:padding="5dp"
                     android:background="@color/grey_dark">
-                    <FrameLayout
-                        android:id="@+id/kategori_penjual"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/kategori_penjual_list"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+                        <LinearLayout
+                            android:id="@+id/ly_chk_sayuran"
+                            android:clickable="false"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            tools:listitem="@layout/item_kategori_penjual"></android.support.v7.widget.RecyclerView>
-                    </FrameLayout>
-
-
-
+                            android:layout_marginLeft="10dp"
+                            android:orientation="horizontal"
+                            android:layout_weight="0.5"
+                            android:weightSum="1">
+                            <CheckBox
+                                android:id="@+id/chk_sayuran"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:enabled="false" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="Sayuran"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/ly_chk_buah"
+                            android:clickable="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="horizontal"
+                            android:layout_weight="0.5"
+                            android:weightSum="1">
+                            <CheckBox
+                                android:id="@+id/chk_buah"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:enabled="false" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="Buah"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.4dp"
+                        android:background="@android:color/darker_gray" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+                        <LinearLayout
+                            android:id="@+id/ly_chk_daging"
+                            android:clickable="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="horizontal"
+                            android:layout_weight="0.5"
+                            android:weightSum="1">
+                            <CheckBox
+                                android:id="@+id/chk_daging"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:enabled="false" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="Daging"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/ly_chk_ikan"
+                            android:clickable="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="horizontal"
+                            android:layout_weight="0.5"
+                            android:weightSum="1">
+                            <CheckBox
+                                android:id="@+id/chk_ikan"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:enabled="false" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="Ikan dan Makanan Laut"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.4dp"
+                        android:background="@android:color/darker_gray" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+                        <LinearLayout
+                            android:id="@+id/ly_chk_palawija"
+                            android:clickable="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="horizontal"
+                            android:layout_weight="0.5"
+                            android:weightSum="1">
+                            <CheckBox
+                                android:id="@+id/chk_palawija"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:enabled="false" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="Palawija"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/ly_chk_bumbu"
+                            android:clickable="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="horizontal"
+                            android:layout_weight="0.5"
+                            android:weightSum="1">
+                            <CheckBox
+                                android:id="@+id/chk_bumbu"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:enabled="false" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="Bumbu Dapur"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.4dp"
+                        android:background="@android:color/darker_gray" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+                        <LinearLayout
+                            android:id="@+id/ly_chk_peralatan"
+                            android:clickable="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="horizontal"
+                            android:layout_weight="0.5"
+                            android:weightSum="1">
+                            <CheckBox
+                                android:id="@+id/chk_peralatan"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:enabled="false" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="Peralatan Masak"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/ly_chk_lain"
+                            android:clickable="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="horizontal"
+                            android:layout_weight="0.5"
+                            android:weightSum="1">
+                            <CheckBox
+                                android:id="@+id/chk_lain"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:enabled="false"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="Lain - lain"/>
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 

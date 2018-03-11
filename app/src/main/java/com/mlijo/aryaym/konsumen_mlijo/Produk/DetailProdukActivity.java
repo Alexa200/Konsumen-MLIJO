@@ -77,7 +77,7 @@ public class DetailProdukActivity extends BaseActivity
     //DecimalFormat df = new DecimalFormat("#0");
     DecimalFormatSymbols dfs = new DecimalFormatSymbols();
     String produkId, penjualId, kategoriId;
-    long hargaProduk;
+    double hargaProduk;
 
 
     @Override
@@ -90,7 +90,7 @@ public class DetailProdukActivity extends BaseActivity
         produkId = getIntent().getExtras().getString(Constants.ID_PRODUK);
         penjualId = getIntent().getExtras().getString(Constants.ID_PENJUAL);
         kategoriId = getIntent().getExtras().getString(Constants.ID_KATEGORI);
-        hargaProduk = getIntent().getExtras().getLong(Constants.HARGA_PRODUK);
+        hargaProduk = getIntent().getExtras().getDouble(Constants.HARGA_PRODUK);
         mFirestore = FirebaseFirestore.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mProdukRef = mFirestore.collection("produk_reguler").document(produkId);

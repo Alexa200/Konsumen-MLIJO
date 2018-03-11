@@ -17,6 +17,10 @@ public class DaftarProdukPresenter {
     }
 
 
+    public FilterProduk getFilters() {
+        return mFilters;
+    }
+
     public void setFilters(FilterProduk filters){
         this.mFilters = filters;
     }

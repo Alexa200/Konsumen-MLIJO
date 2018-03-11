@@ -9,9 +9,10 @@ import java.util.ArrayList;
 
 public class ProdukModel implements Serializable {
 
-    String idPenjual, namaProduk, idKategori,  digitSatuan, namaSatuan, deskripsiProduk;
+    String idPenjual, namaProduk, idKategori, namaSatuan, deskripsiProduk;
     Double hargaProduk;
     String idProduk;
+    int digitSatuan;
     ArrayList<String> gambarProduk = new ArrayList<>();
     Long waktuDibuat;
 
@@ -38,7 +39,7 @@ public class ProdukModel implements Serializable {
         return hargaProduk;
     }
 
-    public String getSatuanProduk() {
+    public int getSatuanProduk() {
         return digitSatuan;
     }
 
