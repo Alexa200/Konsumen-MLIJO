@@ -67,6 +67,8 @@
             android:name=".KelolaPembelian.DetailTransaksiActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".LokasiPenjual.LokasiPenjualActivity"/>
+        <activity
             android:name=".Obrolan.ObrolanActivity"
             android:screenOrientation="portrait"/>
         <activity

@@ -36,6 +36,7 @@ import com.mlijo.aryaym.konsumen_mlijo.Base.InternetConnection;
 import com.mlijo.aryaym.konsumen_mlijo.DBModel.KonsumenModel;
 import com.mlijo.aryaym.konsumen_mlijo.Dashboard.DashboardFragment;
 import com.mlijo.aryaym.konsumen_mlijo.KelolaPembelian.KelolaPembelianFragment;
+import com.mlijo.aryaym.konsumen_mlijo.LokasiPenjual.LokasiPenjualActivity;
 import com.mlijo.aryaym.konsumen_mlijo.Obrolan.DaftarObrolanFragment;
 import com.mlijo.aryaym.konsumen_mlijo.Pengaturan.PengaturanFragment;
 import com.mlijo.aryaym.konsumen_mlijo.Pengaturan.ProfilFragment;
@@ -229,10 +230,10 @@ public class MainActivity extends AppCompatActivity
             case R.id.info_harga:
                 infoHarga();
                 break;
-//            case R.id.lokasi_penjual:
-//                Intent intentLokasi = new Intent(this, LokasiPenjualActivity.class);
-//                startActivity(intentLokasi);
-//                break;
+            case R.id.lokasi_penjual:
+                Intent intentLokasi = new Intent(this, LokasiPenjualActivity.class);
+                startActivity(intentLokasi);
+                break;
             case R.id.obrolan:
                 DaftarObrolanFragment daftarObrolanFragment = new DaftarObrolanFragment();
                 transaction.addToBackStack(DaftarObrolanFragment.class.getName());
