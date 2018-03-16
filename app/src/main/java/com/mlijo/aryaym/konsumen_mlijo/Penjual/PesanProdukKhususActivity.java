@@ -1,6 +1,7 @@
 package com.mlijo.aryaym.konsumen_mlijo.Penjual;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,10 +14,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
 import com.codetroopers.betterpickers.calendardatepicker.MonthAdapter;
 import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mlijo.aryaym.konsumen_mlijo.Base.BaseActivity;
 import com.mlijo.aryaym.konsumen_mlijo.Base.InternetConnection;
@@ -176,23 +180,36 @@ public class PesanProdukKhususActivity extends BaseActivity
 
     private void buatProdukKhusus() {
         String namaProduk = inputNamaProduk.getText().toString();
-        String satuanProduk = inputSatuanDigit.getText().toString();
+        int satuanProduk = Integer.parseInt(inputSatuanDigit.getText().toString());
 
         if (cekKolomIsian() == true) {
             //String statusCekKolomIsian = String.valueOf(cekKolomIsian());
             if (InternetConnection.getInstance().isOnline(PesanProdukKhususActivity.this)) {
                 try {
+                    showProgessDialog();
                     String pushId = mDatabase.child(Constants.PRODUK_KHUSUS).child(kategoriProduk).push().getKey();
-                    String produkId = pushId;
+                    final String produkId = pushId;
                     HashMap<String, Object> dataProduk = new HashMap<>();
                     dataProduk.put(Constants.NAMAPRODUK, namaProduk);
                     dataProduk.put(Constants.DIGITSATUAN, satuanProduk);
                     dataProduk.put(Constants.NAMASATUAN, namaSatuan);
                     dataProduk.put(Constants.ID_PRODUK, produkId);
                     //mDatabase.child(Constants.PRODUK_KHUSUS).child(kategoriProduk).child(produkId).setValue(dataProduk);
-                    mFirestore.collection(Constants.PRODUK_KHUSUS).document(produkId).set(dataProduk);
+                    //mFirestore.collection(Constants.PRODUK_KHUSUS).document(produkId).set(dataProduk);
+                    mFirestore.collection(Constants.PRODUK_KHUSUS).document(produkId).set(dataProduk)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            pesanProdukKhusus(produkId);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            ShowSnackbar.showSnack(PesanProdukKhususActivity.this, "gagal membuat pesanan");
+                        }
+                    });
                    // String status = "cekKolomIsian true, setValue dataProduk berhasil";
-                    pesanProdukKhusus(produkId);
+                    //pesanProdukKhusus(produkId);
                     //driverPesanProdukKhusus(produkId);
                 } catch (Exception e) {
                     ShowSnackbar.showSnack(this, getResources().getString(R.string.msg_error));
@@ -242,11 +259,12 @@ public class PesanProdukKhususActivity extends BaseActivity
                 pemesanan.put(Constants.TANGGAL_KIRIM, tanggalKirim);
                 pemesanan.put(Constants.WAKTU_KIRIM, waktuKirim);
 
-                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.PEMBELIAN).child(Constants.PEMBELIAN_BARU).child(pushId).setValue(pemesanan);
-                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.PENJUALAN).child(Constants.PENJUALAN_BARU).child(pushId).setValue(pemesanan);
+                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.PEMBELIAN_BARU).child(pushId).setValue(pemesanan);
+                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.PENJUALAN_BARU).child(pushId).setValue(pemesanan);
                 //String statusPemesanan = "pemesanan produk berhasil";
                 buatNotifikasiOrder();
                 finish();
+                Toast.makeText(getApplicationContext(), "Anda telah berhasil melakukan pemesanan produk", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 ShowSnackbar.showSnack(this, getResources().getString(R.string.msg_error));
             }

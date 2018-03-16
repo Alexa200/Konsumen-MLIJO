@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -157,12 +158,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        int count = getFragmentManager().getBackStackEntryCount();
+        FragmentManager manager = getSupportFragmentManager();
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
-        if (count == 0){
-           // super.onBackPressed();
+
+        if (manager.getBackStackEntryCount() > 1){
+            manager.popBackStack();
+        }else {
             new AlertDialog.Builder(this)
                     .setMessage("Apa anda ingin keluar aplikasi?")
                     .setCancelable(false)
@@ -174,20 +177,7 @@ public class MainActivity extends AppCompatActivity
                     })
                     .setNegativeButton("Tidak", null)
                     .show();
-        }else {
-            getFragmentManager().popBackStack();
         }
-//        new AlertDialog.Builder(this)
-//                .setMessage("Apa anda ingin keluar aplikasi?")
-//                .setCancelable(false)
-//                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        exit = true;
-//                        finish();
-//                    }
-//                })
-//                .setNegativeButton("Tidak", null)
-//                .show();
     }
 
     @Override
@@ -247,8 +237,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.pengaturan:
                 PengaturanFragment pengaturanFragment = new PengaturanFragment();
                 transaction.addToBackStack(PengaturanFragment.class.getName());
-                //transaction.replace(R.id.main_fragment_container, pengaturanFragment).commit();
-                getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, pengaturanFragment).commit();
+                transaction.replace(R.id.main_fragment_container, pengaturanFragment).commit();
+                //getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, pengaturanFragment).commit();
                 break;
             case R.id.bantuan:
                 BantuanFragment bantuanFragment = new BantuanFragment();

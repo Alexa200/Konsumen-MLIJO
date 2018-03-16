@@ -58,7 +58,7 @@ public class KelolaPembelianFragment extends Fragment implements ValueEventListe
     public void onStart() {
         super.onStart();
 
-        mDatabase.child(Constants.KONSUMEN).child(BaseActivity.getUid()).child(Constants.PEMBELIAN).addValueEventListener(this);
+        mDatabase.child(Constants.KONSUMEN).child(BaseActivity.getUid()).child(Constants.DAFTAR_TRANSAKSI).addValueEventListener(this);
     }
 
     @Override

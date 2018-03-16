@@ -102,6 +102,7 @@ public class Constants {
     public static final String BIAYA_KIRIM = "biayaKirim";
     public static final String TANGGAL_KIRIM = "tanggalKirim";
     public static final String WAKTU_KIRIM = "waktuKirim";
+    public static final String DAFTAR_TRANSAKSI = "daftarTransaksi";
     //Obrolan
     public static final String OBROLAN = "obrolan";
     public static final String KONTEN = "konten";

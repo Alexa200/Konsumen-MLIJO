@@ -36,7 +36,7 @@ public class DaftarTransaksiPresenter {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         jt  = view.jenisTransaksi;
         mQuery = mDatabase.child(Constants.KONSUMEN).child(getUid())
-                .child(Constants.PEMBELIAN).child(jt);
+                .child(Constants.DAFTAR_TRANSAKSI).child(jt);
     }
 
     public void getDataTransaksi(){

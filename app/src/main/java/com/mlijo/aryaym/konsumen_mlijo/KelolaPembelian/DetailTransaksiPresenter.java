@@ -66,7 +66,7 @@ public class DetailTransaksiPresenter {
                         ProdukModel produkModel = snapshot.toObject(ProdukModel.class);
                         try {
                             view.txtNamaProduk.setText(produkModel.getNamaProduk());
-                            view.txtSatuanDigit.setText(produkModel.getSatuanProduk());
+                            view.txtSatuanDigit.setText(String.valueOf(produkModel.getSatuanProduk()));
                             view.txtSatuan.setText(produkModel.getNamaSatuan());
                             view.txtHargaProduk.setText("Rp." + BaseActivity.rupiah().format(produkModel.getHargaProduk()));
                             ImageLoader.getInstance().loadImageOther(view, produkModel.getGambarProduk().get(0), view.imgProduk);

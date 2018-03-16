@@ -23,8 +23,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".SplashScreen">
+        <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,11 +32,12 @@
         </activity>
         <activity
             android:name=".Autentifikasi.AutentifikasiTeleponActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Autentifikasi.DataUserBaruActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Autentifikasi.DataUserBaruActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_dashboard"
@@ -56,38 +56,42 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Penjual.PesanProdukKhususActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Penjual.DetailPenjualActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".KelolaPembelian.DaftarTransaksiActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".KelolaPembelian.DetailTransaksiActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".LokasiPenjual.LokasiPenjualActivity"/>
+            android:screenOrientation="portrait" />
+        <activity android:name=".LokasiPenjual.LokasiPenjualActivity" />
         <activity
             android:name=".Obrolan.ObrolanActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Ulasan.BuatUlasanActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Ulasan.DetailUlasanActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Pengaturan.PengaturanProfilActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.thefinestartist.finestwebview.FinestWebViewActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor"
             android:theme="@style/FinestWebViewTheme.Light" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".Produk.PencarianActivity"
+            android:theme="@style/AppThemePencarian"></activity>
     </application>
 
 </manifest>

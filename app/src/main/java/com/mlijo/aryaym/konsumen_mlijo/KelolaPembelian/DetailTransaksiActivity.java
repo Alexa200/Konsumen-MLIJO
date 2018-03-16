@@ -162,20 +162,20 @@ public class DetailTransaksiActivity extends BaseActivity {
     }
 
     private void batalOrder() {
-        mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.PENJUALAN).child(Constants.PENJUALAN_BARU).child(transaksiId)
+        mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.PENJUALAN_BARU).child(transaksiId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.PENJUALAN).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
+                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
                         .setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                                 //  ShowAlertDialog.showAlert("sukses", DetailTransaksiActivity.this);
-                                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.PENJUALAN).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
+                                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
                                         .child(Constants.STATUS_TRANSAKSI).setValue(6);
                             }
                         });
-                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.PENJUALAN).child(Constants.PENJUALAN_BARU).child(transaksiId).removeValue();
+                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.PENJUALAN_BARU).child(transaksiId).removeValue();
             }
 
             @Override
@@ -183,19 +183,19 @@ public class DetailTransaksiActivity extends BaseActivity {
 
             }
         });
-        mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.PEMBELIAN).child(Constants.PEMBELIAN_BARU).child(transaksiId).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.PEMBELIAN_BARU).child(transaksiId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.PEMBELIAN).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
+                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
                         .setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                                 //  ShowAlertDialog.showAlert("sukses", DetailTransaksiActivity.this);
-                                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.PEMBELIAN).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
+                                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
                                         .child(Constants.STATUS_TRANSAKSI).setValue(6);
                             }
                         });
-                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.PEMBELIAN).child(Constants.PEMBELIAN_BARU).child(transaksiId).removeValue();
+                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.PEMBELIAN_BARU).child(transaksiId).removeValue();
             }
 
             @Override
@@ -207,21 +207,21 @@ public class DetailTransaksiActivity extends BaseActivity {
     }
 
     private void terimaKiriman() {
-        mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.PENJUALAN).child(Constants.STATUS_PENGIRIMAN).child(transaksiId).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.STATUS_PENGIRIMAN).child(transaksiId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.PENJUALAN).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
+                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
                         .setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                                 //  ShowAlertDialog.showAlert("sukses", DetailTransaksiActivity.this);
-                                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.PENJUALAN).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
+                                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
                                         .child(Constants.STATUS_TRANSAKSI).setValue(7);
-                                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.PENJUALAN).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
+                                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
                                         .child(Constants.NAMA_PENERIMA).setValue(Constants.NAMA_PENERIMA);
                             }
                         });
-                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.PENJUALAN).child(Constants.STATUS_PENGIRIMAN).child(transaksiId).removeValue();
+                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.STATUS_PENGIRIMAN).child(transaksiId).removeValue();
             }
 
             @Override
@@ -229,21 +229,21 @@ public class DetailTransaksiActivity extends BaseActivity {
 
             }
         });
-        mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.PEMBELIAN).child(Constants.STATUS_PEMBELIAN).child(transaksiId).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.STATUS_PEMBELIAN).child(transaksiId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.PEMBELIAN).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
+                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
                         .setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                                 //  ShowAlertDialog.showAlert("sukses", DetailTransaksiActivity.this);
-                                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.PEMBELIAN).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
+                                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
                                         .child(Constants.STATUS_TRANSAKSI).setValue(7);
-                                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.PEMBELIAN).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
+                                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
                                         .child(Constants.NAMA_PENERIMA).setValue(Constants.NAMA_PENERIMA);
                             }
                         });
-                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.PEMBELIAN).child(Constants.STATUS_PEMBELIAN).child(transaksiId).removeValue();
+                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.STATUS_PEMBELIAN).child(transaksiId).removeValue();
             }
 
             @Override

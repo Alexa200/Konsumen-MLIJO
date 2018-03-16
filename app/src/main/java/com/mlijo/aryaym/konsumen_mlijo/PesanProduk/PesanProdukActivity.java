@@ -1,6 +1,7 @@
 package com.mlijo.aryaym.konsumen_mlijo.PesanProduk;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -10,12 +11,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
 import com.codetroopers.betterpickers.calendardatepicker.MonthAdapter;
 import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment;
 import com.gildaswise.horizontalcounter.HorizontalCounter;
 import com.gildaswise.horizontalcounter.RepeatListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -91,8 +95,7 @@ public class PesanProdukActivity extends BaseActivity
     private HorizontalCounter numberPicker;
     String produkId, penjualId, kategoriId;
     DecimalFormat df = new DecimalFormat("#0");
-    double a, b;
-    long hargaProduk;
+    double a, b, hargaProduk;
     private long timeOpenInMinute = 0;
     private static final String FRAG_TAG_TIME_PICKER_OPEN = "timePickerDialogFragmentOpen";
     private static final String FRAG_TAG_DATE_PICKER = "fragment_date_picker_name";
@@ -107,7 +110,7 @@ public class PesanProdukActivity extends BaseActivity
 
         produkId = getIntent().getExtras().getString(Constants.ID_PRODUK);
         penjualId = getIntent().getExtras().getString(Constants.ID_PENJUAL);
-        hargaProduk = getIntent().getExtras().getLong(Constants.HARGA_PRODUK);
+        hargaProduk = getIntent().getExtras().getDouble(Constants.HARGA_PRODUK);
         mFirestore = FirebaseFirestore.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mProdukRef = mFirestore.collection("produk_reguler").document(produkId);
@@ -125,7 +128,62 @@ public class PesanProdukActivity extends BaseActivity
         if (produkId != null) {
             mProdukReg = mProdukRef.addSnapshotListener(this);
             mKonsumenReg = mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DETAIL_KONSUMEN).addValueEventListener(this);
-            Log.d("nilai UID", "" + getUid());
+            //Log.d("nilai harga intent", "" + hargaProduk);
+        }
+    }
+
+    //load data produk
+    @Override
+    public void onEvent(DocumentSnapshot snapshot, FirebaseFirestoreException e) {
+        if (e != null) {
+            Log.w("detail", "restaurant:onEvent", e);
+            return;
+        }
+        onProductLoaded(snapshot.toObject(ProdukModel.class));
+    }
+
+    private void onProductLoaded(final ProdukModel produkModel) {
+        //Log.d("nilai model", "" + produkModel);
+        try {
+            txtNamaProduk.setText(produkModel.getNamaProduk());
+            txtHargaProduk.setText("Rp." + rupiah().format(Double.valueOf(hargaProduk)));
+            txtSatuanDigit.setText(produkModel.getSatuanProduk() + "");
+            txtSatuan.setText(produkModel.getNamaSatuan());
+            ImageLoader.getInstance().loadImageOther(this, produkModel.getGambarProduk().get(0), imgProduk);
+            hargaProdukView.setText(rupiah().format(totalHarga(produkModel.getHargaProduk())));
+            numberPicker.setOnReleaseListener(new RepeatListener.ReleaseCallback() {
+                @Override
+                public void onRelease() {
+                    hargaProdukView.setText(rupiah().format(totalHarga(Double.valueOf(hargaProduk))));
+                }
+            });
+        } catch (Exception e) {
+
+        }
+    }
+
+    private double totalHarga(double harga) {
+        a = numberPicker.getCurrentValue();
+        b = harga;
+        double hargaTotal = a * b;
+        if (a == 1) {
+            return b;
+        } else {
+            return hargaTotal;
+        }
+    }
+
+    // load data penjual
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        if (dataSnapshot != null) {
+            KonsumenModel konsumenModel = dataSnapshot.getValue(KonsumenModel.class);
+            //Log.d("nilai model konsumen", "" + konsumenModel);
+            if (konsumenModel != null) {
+                namaPenerima.setText(konsumenModel.getNama());
+                alamatLengkap.setText(konsumenModel.getAlamat());
+                telpPenerima.setText(konsumenModel.getNoTelp());
+            }
         }
     }
 
@@ -153,6 +211,7 @@ public class PesanProdukActivity extends BaseActivity
             if (InternetConnection.getInstance().isOnline(PesanProdukActivity.this)) {
                 Log.d("test pesan", "koneksi sukses");
                 try {
+                    showProgessDialog();
                     String pushId = mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.PENJUALAN).push().getKey();
                     String transaksiId = pushId;
                     //Log.d("test pesan", "" + pemesananId);
@@ -172,13 +231,26 @@ public class PesanProdukActivity extends BaseActivity
                     pemesanan.put(Constants.TANGGAL_KIRIM, tanggalKirim);
                     pemesanan.put(Constants.WAKTU_KIRIM, waktuKirim);
 
-                    //Log.d("test pesan", "data =" + pemesanan);
-                    mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.PEMBELIAN).child(Constants.PEMBELIAN_BARU).child(pushId).setValue(pemesanan);
-                    mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.PENJUALAN).child(Constants.PENJUALAN_BARU).child(pushId).setValue(pemesanan);
+                    mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.PEMBELIAN_BARU).child(pushId).setValue(pemesanan);
+                    mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.PENJUALAN_BARU).child(pushId).setValue(pemesanan)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            buatNotifikasiOrder();
+                            hideProgressDialog();
+                            finish();
+                            Toast.makeText(getApplicationContext(), "Anda telah berhasil melakukan pemesanan produk", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            hideProgressDialog();
+                            ShowSnackbar.showSnack(PesanProdukActivity.this, "gagal membuat pesanan");
+                        }
+                    });
                     //Log.d("test pesan", "sukses");
 
-                    buatNotifikasiOrder();
-                    finish();
+
                 } catch (Exception e) {
                     ShowSnackbar.showSnack(this, getResources().getString(R.string.msg_error));
                 }
@@ -248,60 +320,7 @@ public class PesanProdukActivity extends BaseActivity
 //        mDatabase.child(Constants.NOTIFIKASI).child(Constants.ORDER).child(produkModel.getIdPenjual()).child(key).child(Constants.TRANSAKSI).setValue(Constants.PENJUALAN_BARU);
     }
 
-    //load data produk
-    @Override
-    public void onEvent(DocumentSnapshot snapshot, FirebaseFirestoreException e) {
-        if (e != null) {
-            Log.w("detail", "restaurant:onEvent", e);
-            return;
-        }
-        onProductLoaded(snapshot.toObject(ProdukModel.class));
-    }
 
-    private void onProductLoaded(final ProdukModel produkModel) {
-        Log.d("nilai model", "" + produkModel);
-        try {
-            txtNamaProduk.setText(produkModel.getNamaProduk());
-            txtHargaProduk.setText("Rp." + rupiah().format(produkModel.getHargaProduk()));
-            txtSatuanDigit.setText(produkModel.getSatuanProduk() + "");
-            txtSatuan.setText(produkModel.getNamaSatuan());
-            ImageLoader.getInstance().loadImageOther(this, produkModel.getGambarProduk().get(0), imgProduk);
-            hargaProdukView.setText(rupiah().format(totalHarga(produkModel.getHargaProduk())));
-            numberPicker.setOnReleaseListener(new RepeatListener.ReleaseCallback() {
-                @Override
-                public void onRelease() {
-                    hargaProdukView.setText(rupiah().format(totalHarga(produkModel.getHargaProduk())));
-                }
-            });
-        } catch (Exception e) {
-
-        }
-    }
-
-    private double totalHarga(double harga) {
-        a = numberPicker.getCurrentValue();
-        b = harga;
-        double hargaTotal = a * b;
-        if (a == 1) {
-            return b;
-        } else {
-            return hargaTotal;
-        }
-    }
-
-    // load data penjual
-    @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
-        if (dataSnapshot != null) {
-            KonsumenModel konsumenModel = dataSnapshot.getValue(KonsumenModel.class);
-            Log.d("nilai model konsumen", "" + konsumenModel);
-            if (konsumenModel != null) {
-                namaPenerima.setText(konsumenModel.getNama());
-                alamatLengkap.setText(konsumenModel.getAlamat());
-                telpPenerima.setText(konsumenModel.getNoTelp());
-            }
-        }
-    }
 
     @Override
     public void onCancelled(DatabaseError databaseError) {
