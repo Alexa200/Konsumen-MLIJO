@@ -21,6 +21,11 @@ import com.codetroopers.betterpickers.calendardatepicker.MonthAdapter;
 import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mlijo.aryaym.konsumen_mlijo.Base.BaseActivity;
 import com.mlijo.aryaym.konsumen_mlijo.Base.InternetConnection;
@@ -29,11 +34,6 @@ import com.mlijo.aryaym.konsumen_mlijo.R;
 import com.mlijo.aryaym.konsumen_mlijo.Utils.Constants;
 import com.mlijo.aryaym.konsumen_mlijo.Utils.ShowAlertDialog;
 import com.mlijo.aryaym.konsumen_mlijo.Utils.ShowSnackbar;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.joda.time.DateTime;
 
@@ -179,10 +179,9 @@ public class PesanProdukKhususActivity extends BaseActivity
 
 
     private void buatProdukKhusus() {
-        String namaProduk = inputNamaProduk.getText().toString();
-        int satuanProduk = Integer.parseInt(inputSatuanDigit.getText().toString());
-
         if (cekKolomIsian() == true) {
+            String namaProduk = inputNamaProduk.getText().toString();
+            int satuanProduk = Integer.parseInt(inputSatuanDigit.getText().toString());
             //String statusCekKolomIsian = String.valueOf(cekKolomIsian());
             if (InternetConnection.getInstance().isOnline(PesanProdukKhususActivity.this)) {
                 try {
@@ -194,8 +193,6 @@ public class PesanProdukKhususActivity extends BaseActivity
                     dataProduk.put(Constants.DIGITSATUAN, satuanProduk);
                     dataProduk.put(Constants.NAMASATUAN, namaSatuan);
                     dataProduk.put(Constants.ID_PRODUK, produkId);
-                    //mDatabase.child(Constants.PRODUK_KHUSUS).child(kategoriProduk).child(produkId).setValue(dataProduk);
-                    //mFirestore.collection(Constants.PRODUK_KHUSUS).document(produkId).set(dataProduk);
                     mFirestore.collection(Constants.PRODUK_KHUSUS).document(produkId).set(dataProduk)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -205,7 +202,7 @@ public class PesanProdukKhususActivity extends BaseActivity
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            ShowSnackbar.showSnack(PesanProdukKhususActivity.this, "gagal membuat pesanan");
+                            ShowSnackbar.showSnack(PesanProdukKhususActivity.this, "gagal membuat produk pesanan, silahkan ulangi lagi");
                         }
                     });
                    // String status = "cekKolomIsian true, setValue dataProduk berhasil";
@@ -241,7 +238,7 @@ public class PesanProdukKhususActivity extends BaseActivity
 
         if (InternetConnection.getInstance().isOnline(PesanProdukKhususActivity.this)) {
             try {
-                String pushId = mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.PEMBELIAN).push().getKey();
+                String pushId = mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).push().getKey();
                 String transaksiId = pushId;
                 Map<String, Object> pemesanan = new HashMap<>();
                 pemesanan.put(Constants.BIAYA_KIRIM, 0);
@@ -259,12 +256,25 @@ public class PesanProdukKhususActivity extends BaseActivity
                 pemesanan.put(Constants.TANGGAL_KIRIM, tanggalKirim);
                 pemesanan.put(Constants.WAKTU_KIRIM, waktuKirim);
 
-                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.PEMBELIAN_BARU).child(pushId).setValue(pemesanan);
-                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.PENJUALAN_BARU).child(pushId).setValue(pemesanan);
+                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI)
+                        .child(Constants.PEMBELIAN_BARU).child(transaksiId).setValue(pemesanan);
+                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI)
+                        .child(Constants.PENJUALAN_BARU).child(transaksiId).setValue(pemesanan)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                buatNotifikasiOrder();
+                                finish();
+                                Toast.makeText(getApplicationContext(), "Anda telah berhasil melakukan pemesanan produk", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        ShowSnackbar.showSnack(PesanProdukKhususActivity.this, "gagal membuat pesanan, silahkan ulangi lagi");
+                    }
+                });
                 //String statusPemesanan = "pemesanan produk berhasil";
-                buatNotifikasiOrder();
-                finish();
-                Toast.makeText(getApplicationContext(), "Anda telah berhasil melakukan pemesanan produk", Toast.LENGTH_SHORT).show();
+
             } catch (Exception e) {
                 ShowSnackbar.showSnack(this, getResources().getString(R.string.msg_error));
             }
