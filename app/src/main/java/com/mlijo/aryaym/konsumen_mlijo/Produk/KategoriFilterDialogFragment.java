@@ -32,7 +32,7 @@ public class KategoriFilterDialogFragment extends DialogFragment {
     @BindView(R.id.spinner_lokasi)
     Spinner spinnerLokasi;
     Unbinder unbinder;
-    interface KategoriFilterListener {
+    public interface KategoriFilterListener {
         void onFilter(FilterProduk filterProduk);
     }
 

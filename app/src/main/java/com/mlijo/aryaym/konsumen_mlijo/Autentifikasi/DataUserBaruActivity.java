@@ -145,7 +145,7 @@ public class DataUserBaruActivity extends BaseActivity implements View.OnClickLi
         detailKonsumenData.put(Constants.TELPON, Telpon);
         detailKonsumenData.put(Constants.LONGITUDE, longitude);
         detailKonsumenData.put(Constants.LATITUDE, latitude);
-        detailKonsumenData.put(Constants.UID, getUid());
+        //detailKonsumenData.put(Constants.UID, getUid());
 
         //documentReference.collection(getUid()).document(Constants.DETAIL_KONSUMEN).set(detailKonsumenData);
         mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.UID).setValue(getUid());

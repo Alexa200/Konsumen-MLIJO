@@ -43,6 +43,7 @@ import com.mlijo.aryaym.konsumen_mlijo.Pengaturan.PengaturanFragment;
 import com.mlijo.aryaym.konsumen_mlijo.Pengaturan.ProfilFragment;
 import com.mlijo.aryaym.konsumen_mlijo.Ulasan.DaftarUlasanFragment;
 import com.mlijo.aryaym.konsumen_mlijo.Utils.Constants;
+import com.onesignal.OneSignal;
 import com.thefinestartist.finestwebview.FinestWebView;
 
 public class MainActivity extends AppCompatActivity
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity
             } else {
                 String token = FirebaseInstanceId.getInstance().getToken();
                 DeviceToken.getInstance().addDeviceToken(mDatabase, BaseActivity.getUid(),  token);
+                OneSignal.sendTag(Constants.UID, BaseActivity.getUid());
                 dataUserDrawer();
             }
         } else {
@@ -285,6 +287,7 @@ public class MainActivity extends AppCompatActivity
 
     private void logOut(){
         FirebaseAuth.getInstance().signOut();
+        OneSignal.sendTag(Constants.UID, null);
         Intent intent = new Intent(this, AutentifikasiTeleponActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

@@ -64,6 +64,7 @@ public class DetailTransaksiPresenter {
                 public void onEvent(DocumentSnapshot snapshot, FirebaseFirestoreException e) {
                     if (snapshot != null){
                         ProdukModel produkModel = snapshot.toObject(ProdukModel.class);
+                        view.nama_produk = produkModel.getNamaProduk();
                         try {
                             view.txtNamaProduk.setText(produkModel.getNamaProduk());
                             view.txtSatuanDigit.setText(String.valueOf(produkModel.getSatuanProduk()));

@@ -1,6 +1,7 @@
 package com.mlijo.aryaym.konsumen_mlijo.PesanProduk;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
@@ -43,10 +44,14 @@ import com.mlijo.aryaym.konsumen_mlijo.Utils.ShowSnackbar;
 
 import org.joda.time.DateTime;
 
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -93,7 +98,7 @@ public class PesanProdukActivity extends BaseActivity
     private ValueEventListener mKonsumenReg;
    // private ProdukModel produkModel;
     private HorizontalCounter numberPicker;
-    String produkId, penjualId, kategoriId;
+    String produkId, penjualId, kategoriId, namaPembeli;
     DecimalFormat df = new DecimalFormat("#0");
     double a, b, hargaProduk;
     private long timeOpenInMinute = 0;
@@ -183,6 +188,7 @@ public class PesanProdukActivity extends BaseActivity
                 namaPenerima.setText(konsumenModel.getNama());
                 alamatLengkap.setText(konsumenModel.getAlamat());
                 telpPenerima.setText(konsumenModel.getNoTelp());
+                namaPembeli = konsumenModel.getNama().toString();
             }
         }
     }
@@ -212,7 +218,7 @@ public class PesanProdukActivity extends BaseActivity
                 Log.d("test pesan", "koneksi sukses");
                 try {
                     showProgessDialog();
-                    String pushId = mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.PENJUALAN).push().getKey();
+                    String pushId = mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).push().getKey();
                     String transaksiId = pushId;
                     //Log.d("test pesan", "" + pemesananId);
                     Map<String, Object> pemesanan = new HashMap<>();
@@ -231,8 +237,8 @@ public class PesanProdukActivity extends BaseActivity
                     pemesanan.put(Constants.TANGGAL_KIRIM, tanggalKirim);
                     pemesanan.put(Constants.WAKTU_KIRIM, waktuKirim);
 
-                    mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.PEMBELIAN_BARU).child(pushId).setValue(pemesanan);
-                    mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.PENJUALAN_BARU).child(pushId).setValue(pemesanan)
+                    mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.TRANSAKSI_BARU).child(pushId).setValue(pemesanan);
+                    mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.TRANSAKSI_BARU).child(pushId).setValue(pemesanan)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -276,16 +282,27 @@ public class PesanProdukActivity extends BaseActivity
             MonthAdapter.CalendarDay minDate = new MonthAdapter.CalendarDay(now.getYear(), now.getMonthOfYear() - 1, now.getDayOfMonth() + 1);
             MonthAdapter.CalendarDay maxDate = new MonthAdapter.CalendarDay(now.getYear(), now.getMonthOfYear() - 1, now.getDayOfMonth() + 7);
 
-            CalendarDatePickerDialogFragment cdp = new CalendarDatePickerDialogFragment()
-                    .setDateRange(minDate, maxDate)
-                    .setPreselectedDate(now.getYear(), now.getMonthOfYear() - 1, now.getDayOfMonth() + 1)
-                    .setOnDateSetListener(PesanProdukActivity.this);
+            int hourNow = now.getHourOfDay();
+            Log.d("jam", ""+ hourNow);
+            if (hourNow <= 12) {
+                CalendarDatePickerDialogFragment cdp = new CalendarDatePickerDialogFragment()
+                        .setDateRange(minDate, maxDate)
+                        .setPreselectedDate(now.getYear(), now.getMonthOfYear() - 1, now.getDayOfMonth() + 0)
+                        .setOnDateSetListener(PesanProdukActivity.this);
 
-            cdp.show(getSupportFragmentManager(), FRAG_TAG_DATE_PICKER);
+                cdp.show(getSupportFragmentManager(), FRAG_TAG_DATE_PICKER);
+            }else {
+                CalendarDatePickerDialogFragment cdp = new CalendarDatePickerDialogFragment()
+                        .setDateRange(minDate, maxDate)
+                        .setPreselectedDate(now.getYear(), now.getMonthOfYear() - 1, now.getDayOfMonth() + 1)
+                        .setOnDateSetListener(PesanProdukActivity.this);
+
+                cdp.show(getSupportFragmentManager(), FRAG_TAG_DATE_PICKER);
+            }
         } else if (v == inputJamKirim) {
             RadialTimePickerDialogFragment time = new RadialTimePickerDialogFragment()
                     .setOnTimeSetListener(PesanProdukActivity.this)
-                    .setStartTime(12, 00)
+                    .setStartTime(4, 00)
                     .setForced24hFormat()
                     .setDoneText("OK")
                     .setCancelText("Batal");
@@ -308,17 +325,75 @@ public class PesanProdukActivity extends BaseActivity
     }
 
     private void buatNotifikasiOrder() {
-        String key = mDatabase.child(Constants.NOTIFIKASI).child(penjualId).push().getKey();
-        Map<String, Object> notifikasi = new HashMap<>();
-        notifikasi.put(Constants.TITLE, "Pesanan Baru");
-        notifikasi.put(Constants.TRANSAKSI, Constants.PENJUALAN_BARU);
-        notifikasi.put("konsumenId", getUid());
-        mDatabase.child(Constants.NOTIFIKASI).child("penjual").child(Constants.ORDER).child(penjualId).child(key).setValue(notifikasi);
+//        String key = mDatabase.child(Constants.NOTIFIKASI).child(penjualId).push().getKey();
+//        Map<String, Object> notifikasi = new HashMap<>();
+//        notifikasi.put(Constants.TITLE, "Pesanan Baru");
+//        notifikasi.put(Constants.TRANSAKSI, Constants.PENJUALAN_BARU);
+//        notifikasi.put("konsumenId", getUid());
+//        mDatabase.child(Constants.NOTIFIKASI).child("penjual").child(Constants.ORDER).child(penjualId).child(key).setValue(notifikasi);
 
 //        mDatabase.child(Constants.NOTIFIKASI).child(Constants.ORDER).child(produkModel.getIdPenjual()).child(key).child("konsumenId").setValue(getUid());
 //        mDatabase.child(Constants.NOTIFIKASI).child(Constants.ORDER).child(produkModel.getIdPenjual()).child(key).child(Constants.TITLE).setValue("Pesanan Baru");
 //        mDatabase.child(Constants.NOTIFIKASI).child(Constants.ORDER).child(produkModel.getIdPenjual()).child(key).child(Constants.TRANSAKSI).setValue(Constants.PENJUALAN_BARU);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        try {
+            String jsonResponse;
+
+            URL url = new URL("https://onesignal.com/api/v1/notifications");
+            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            con.setUseCaches(false);
+            con.setDoOutput(true);
+            con.setDoInput(true);
+
+            con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            con.setRequestProperty("Authorization", "Basic MmE5NTkyYWYtODM3OS00MTkzLTllZGEtNjA5MDM1MDRlYWE4");
+            con.setRequestMethod("POST");
+
+            String strJsonBody = "{"
+                    +   "\"app_id\": \"eed14716-bf93-456a-9833-203325aad307\","
+                    +   "\"included_segments\": [\"All\"],"
+                    +   "\"filters\": [{\"field\": \"tag\", \"key\": \"uid\", \"relation\": \"=\", \"value\": \"" + penjualId + "\"}],"
+                    +   "\"data\": {\"title\": \"Pesanan Baru\",\"click_action\": \"2\",\"transaksi\": \"transaksiBaru\"},"
+                    //+   "\"data\": {\"uid\": \"SyykXrusoxTSP8nWg2u4kYFQIdq2\",\"click_action\": \"1\"},"
+                    +   "\"contents\": {\"en\": \"Pesanan baru dari " + namaPembeli + "\"}"
+                    + "}";
+
+
+            //System.out.println("strJsonBody:\n" + strJsonBody);
+            Log.d("nilai strJsonBody:", "" + strJsonBody);
+
+            byte[] sendBytes = strJsonBody.getBytes("UTF-8");
+            con.setFixedLengthStreamingMode(sendBytes.length);
+
+            OutputStream outputStream = con.getOutputStream();
+            outputStream.write(sendBytes);
+
+            int httpResponse = con.getResponseCode();
+            //System.out.println("httpResponse: " + httpResponse);
+            Log.d("nilai httpRespone:", "" + httpResponse);
+
+            if (  httpResponse >= HttpURLConnection.HTTP_OK
+                    && httpResponse < HttpURLConnection.HTTP_BAD_REQUEST) {
+                Scanner scanner = new Scanner(con.getInputStream(), "UTF-8");
+                jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                scanner.close();
+            }
+            else {
+                Scanner scanner = new Scanner(con.getErrorStream(), "UTF-8");
+                jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                scanner.close();
+            }
+            //System.out.println("jsonResponse:\n" + jsonResponse);
+            Log.d("nilai jsonRespone:", "" + jsonResponse);
+
+        } catch(Throwable t) {
+            t.printStackTrace();
+        }
     }
+
 
 
 

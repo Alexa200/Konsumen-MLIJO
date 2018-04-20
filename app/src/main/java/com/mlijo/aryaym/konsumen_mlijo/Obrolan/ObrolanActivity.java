@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -32,11 +33,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mlijo.aryaym.konsumen_mlijo.Base.BaseActivity;
 import com.mlijo.aryaym.konsumen_mlijo.Base.InternetConnection;
+import com.mlijo.aryaym.konsumen_mlijo.DBModel.KonsumenModel;
 import com.mlijo.aryaym.konsumen_mlijo.DBModel.ObrolanModel;
 import com.mlijo.aryaym.konsumen_mlijo.DBModel.ObrolanTerakhirModel;
 import com.mlijo.aryaym.konsumen_mlijo.R;
@@ -44,11 +47,15 @@ import com.mlijo.aryaym.konsumen_mlijo.Utils.Constants;
 import com.mlijo.aryaym.konsumen_mlijo.Utils.EncodeImage;
 import com.mlijo.aryaym.konsumen_mlijo.Utils.ShowSnackbar;
 
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -408,7 +415,7 @@ public class ObrolanActivity extends BaseActivity implements View.OnClickListene
             recyclerChat.smoothScrollToPosition(obrolanAdapter.getItemCount());
             //clear data
             inputPesan.setText("");
-            buatNotifikasiKePenjual();
+            buatNotifikasiKePenjual(getUid(), penerimaId);
         } catch (Exception e) {
 
         }
@@ -442,9 +449,81 @@ public class ObrolanActivity extends BaseActivity implements View.OnClickListene
         mDatabase.child(Constants.OBROLAN).child(currentId).child(partnerId).child(key).updateChildren(dataUpdate);
     }
 
-    private void buatNotifikasiKePenjual() {
-        String key = mDatabase.child(Constants.NOTIFIKASI).child("penjual").child(Constants.OBROLAN).child(penerimaId).push().getKey();
-        mDatabase.child(Constants.NOTIFIKASI).child("penjual").child(Constants.OBROLAN).child(penerimaId).child(key).child("pengirimId").setValue(getUid());
-    }
+    private void buatNotifikasiKePenjual(final String idPengirim, final String idPenerima) {
+//        String key = mDatabase.child(Constants.NOTIFIKASI).child("penjual").child(Constants.OBROLAN).child(penerimaId).push().getKey();
+//        mDatabase.child(Constants.NOTIFIKASI).child("penjual").child(Constants.OBROLAN).child(penerimaId).child(key).child("pengirimId").setValue(getUid());
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        mDatabase.child(Constants.KONSUMEN).child(getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null){
+                    KonsumenModel konsumenModel = dataSnapshot.getValue(KonsumenModel.class);
+                    String namaKonsumen = konsumenModel.getDetailKonsumen().get(Constants.NAMA).toString();
+                    String avatarKonsumen = konsumenModel.getDetailKonsumen().get(Constants.AVATAR).toString();
+
+                    try {
+                        String jsonResponse;
+
+                        URL url = new URL("https://onesignal.com/api/v1/notifications");
+                        HttpURLConnection con = (HttpURLConnection)url.openConnection();
+                        con.setUseCaches(false);
+                        con.setDoOutput(true);
+                        con.setDoInput(true);
+
+                        con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                        con.setRequestProperty("Authorization", "Basic MmE5NTkyYWYtODM3OS00MTkzLTllZGEtNjA5MDM1MDRlYWE4");
+                        con.setRequestMethod("POST");
+
+                        String strJsonBody = "{"
+                                +   "\"app_id\": \"eed14716-bf93-456a-9833-203325aad307\","
+                                +   "\"included_segments\": [\"All\"],"
+                                +   "\"filters\": [{\"field\": \"tag\", \"key\": \"uid\", \"relation\": \"=\", \"value\": \"" + idPenerima + "\"}],"
+                                +   "\"data\": {\"uid\": \"" + idPengirim + "\",\"click_action\": \"1\",\"nama_pengirim\": \""+ namaKonsumen +"\",\"avatar\":\""+avatarKonsumen+"\"},"
+                                //+   "\"data\": {\"uid\": \"SyykXrusoxTSP8nWg2u4kYFQIdq2\",\"click_action\": \"1\"},"
+                                +   "\"contents\": {\"en\": \"Obrolan baru dari " + namaKonsumen + "\"}"
+                                + "}";
+
+
+                        //System.out.println("strJsonBody:\n" + strJsonBody);
+                        Log.d("nilai strJsonBody:", "" + strJsonBody);
+
+                        byte[] sendBytes = strJsonBody.getBytes("UTF-8");
+                        con.setFixedLengthStreamingMode(sendBytes.length);
+
+                        OutputStream outputStream = con.getOutputStream();
+                        outputStream.write(sendBytes);
+
+                        int httpResponse = con.getResponseCode();
+                        //System.out.println("httpResponse: " + httpResponse);
+                        Log.d("nilai httpRespone:", "" + httpResponse);
+
+                        if (  httpResponse >= HttpURLConnection.HTTP_OK
+                                && httpResponse < HttpURLConnection.HTTP_BAD_REQUEST) {
+                            Scanner scanner = new Scanner(con.getInputStream(), "UTF-8");
+                            jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                            scanner.close();
+                        }
+                        else {
+                            Scanner scanner = new Scanner(con.getErrorStream(), "UTF-8");
+                            jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                            scanner.close();
+                        }
+                        //System.out.println("jsonResponse:\n" + jsonResponse);
+                        Log.d("nilai jsonRespone:", "" + jsonResponse);
+
+                    } catch(Throwable t) {
+                        t.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

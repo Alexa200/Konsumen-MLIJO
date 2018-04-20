@@ -1,7 +1,11 @@
 package com.mlijo.aryaym.konsumen_mlijo.KelolaPembelian;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,6 +24,11 @@ import com.mlijo.aryaym.konsumen_mlijo.Obrolan.ObrolanActivity;
 import com.mlijo.aryaym.konsumen_mlijo.R;
 import com.mlijo.aryaym.konsumen_mlijo.Ulasan.BuatUlasanActivity;
 import com.mlijo.aryaym.konsumen_mlijo.Utils.Constants;
+
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,7 +85,7 @@ public class DetailTransaksiActivity extends BaseActivity {
     TextView txtTanggalAntar;
     private DatabaseReference mDatabase;
     private TransaksiModel transaksiModel;
-    public String transaksiId, penjualId, jenisProduk, produkId;
+    public String transaksiId, penjualId, jenisProduk, produkId, nama_produk;
     private DetailTransaksiPresenter presenter;
 
     @Override
@@ -162,7 +171,9 @@ public class DetailTransaksiActivity extends BaseActivity {
     }
 
     private void batalOrder() {
-        mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.PENJUALAN_BARU).child(transaksiId)
+        String status_transaksi_title = "dibatalkan";
+        String status_transaksi = Constants.RIWAYAT_TRANSAKSI;
+        mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.TRANSAKSI_BARU).child(transaksiId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -175,7 +186,7 @@ public class DetailTransaksiActivity extends BaseActivity {
                                         .child(Constants.STATUS_TRANSAKSI).setValue(6);
                             }
                         });
-                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.PENJUALAN_BARU).child(transaksiId).removeValue();
+                mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.TRANSAKSI_BARU).child(transaksiId).removeValue();
             }
 
             @Override
@@ -183,7 +194,7 @@ public class DetailTransaksiActivity extends BaseActivity {
 
             }
         });
-        mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.PEMBELIAN_BARU).child(transaksiId).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.TRANSAKSI_BARU).child(transaksiId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
@@ -195,7 +206,7 @@ public class DetailTransaksiActivity extends BaseActivity {
                                         .child(Constants.STATUS_TRANSAKSI).setValue(6);
                             }
                         });
-                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.PEMBELIAN_BARU).child(transaksiId).removeValue();
+                mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.TRANSAKSI_BARU).child(transaksiId).removeValue();
             }
 
             @Override
@@ -203,11 +214,11 @@ public class DetailTransaksiActivity extends BaseActivity {
 
             }
         });
-
+        buatNotifikasiStatusTransaksi(status_transaksi, status_transaksi_title);
     }
 
     private void terimaKiriman() {
-        mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.STATUS_PENGIRIMAN).child(transaksiId).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.STATUS_TRANSAKSI).child(transaksiId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mDatabase.child(Constants.PENJUAL).child(penjualId).child(Constants.DAFTAR_TRANSAKSI).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
@@ -229,7 +240,7 @@ public class DetailTransaksiActivity extends BaseActivity {
 
             }
         });
-        mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.STATUS_PEMBELIAN).child(transaksiId).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.STATUS_TRANSAKSI).child(transaksiId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mDatabase.child(Constants.KONSUMEN).child(getUid()).child(Constants.DAFTAR_TRANSAKSI).child(Constants.RIWAYAT_TRANSAKSI).child(transaksiId)
@@ -289,9 +300,84 @@ public class DetailTransaksiActivity extends BaseActivity {
         });
     }
 
+    private void buatNotifikasiStatusTransaksi(String status, String title){
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        String penjualId = transaksiModel.getIdPenjual();
+
+        try {
+            String jsonResponse;
+
+            URL url = new URL("https://onesignal.com/api/v1/notifications");
+            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            con.setUseCaches(false);
+            con.setDoOutput(true);
+            con.setDoInput(true);
+
+            con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            con.setRequestProperty("Authorization", "Basic MmE5NTkyYWYtODM3OS00MTkzLTllZGEtNjA5MDM1MDRlYWE4");
+            con.setRequestMethod("POST");
+
+            String strJsonBody = "{"
+                    +   "\"app_id\": \"eed14716-bf93-456a-9833-203325aad307\","
+                    +   "\"included_segments\": [\"All\"],"
+                    +   "\"filters\": [{\"field\": \"tag\", \"key\": \"uid\", \"relation\": \"=\", \"value\": \"" + penjualId + "\"}],"
+                    +   "\"data\": {\"title\": \"Status Pembelian\",\"click_action\": \"2\",\"transaksi\": \""+ status +"\"},"
+                    //+   "\"data\": {\"uid\": \"SyykXrusoxTSP8nWg2u4kYFQIdq2\",\"click_action\": \"1\"},"
+                    +   "\"contents\": {\"en\": \"Pesanan produk " + nama_produk + " " + title + "oleh pembeli\"}"
+                    + "}";
+
+
+            //System.out.println("strJsonBody:\n" + strJsonBody);
+            Log.d("nilai strJsonBody:", "" + strJsonBody);
+
+            byte[] sendBytes = strJsonBody.getBytes("UTF-8");
+            con.setFixedLengthStreamingMode(sendBytes.length);
+
+            OutputStream outputStream = con.getOutputStream();
+            outputStream.write(sendBytes);
+
+            int httpResponse = con.getResponseCode();
+            //System.out.println("httpResponse: " + httpResponse);
+            Log.d("nilai httpRespone:", "" + httpResponse);
+
+            if (  httpResponse >= HttpURLConnection.HTTP_OK
+                    && httpResponse < HttpURLConnection.HTTP_BAD_REQUEST) {
+                Scanner scanner = new Scanner(con.getInputStream(), "UTF-8");
+                jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                scanner.close();
+            }
+            else {
+                Scanner scanner = new Scanner(con.getErrorStream(), "UTF-8");
+                jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                scanner.close();
+            }
+            //System.out.println("jsonResponse:\n" + jsonResponse);
+            Log.d("nilai jsonRespone:", "" + jsonResponse);
+
+        } catch(Throwable t) {
+            t.printStackTrace();
+        }
+    }
+
     @OnClick(R.id.btn_batal_pesan)
     public void onBtnBatalPesanClicked() {
-        batalOrder();
+        final AlertDialog.Builder cancelBuilder = new AlertDialog.Builder(getApplicationContext());
+        cancelBuilder.setMessage(R.string.batalOrder).setCancelable(false)
+                .setPositiveButton(R.string.lbl_ya, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        batalOrder();
+                    }
+                })
+                .setNegativeButton(R.string.lbl_tidak, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+        cancelBuilder.create().show();
         finish();
     }
 

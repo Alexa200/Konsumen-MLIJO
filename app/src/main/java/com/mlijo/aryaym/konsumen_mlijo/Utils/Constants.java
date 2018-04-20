@@ -84,12 +84,13 @@ public class Constants {
     public static final String TRANSAKSI = "transaksi";
     public static final String JENIS_PRODUK = "jenisProduk";
     public static final String STATUS_TRANSAKSI = "statusTransaksi";
-    public static final String PENJUALAN = "penjualan";
+    public static final String PENJUALAN = "penjualan";//rename daftar transaksi
     public static final String PENJUALAN_BARU = "penjualanBaru";
-    public static final String STATUS_PENGIRIMAN = "statusPengiriman";
-    public static final String PEMBELIAN = "pembelian";
+    public static final String TRANSAKSI_BARU = "transaksiBaru";
+    public static final String STATUS_PENGIRIMAN = "statusPengiriman";//rename status transaksi
+    public static final String PEMBELIAN = "pembelian";//rename daftar transaksi
     public static final String PEMBELIAN_BARU = "pembelianBaru";
-    public static final String STATUS_PEMBELIAN = "statusPembelian";
+    public static final String STATUS_PEMBELIAN = "statusPembelian";//rename status transaksi
     public static final String TRANSAKSI_COUNT = "jumlahTransaksi";
     public static final String RIWAYAT_TRANSAKSI = "riwayatTransaksi";
     public static final String ID_PENJUAL = "idPenjual";

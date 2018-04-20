@@ -65,8 +65,8 @@ public class KelolaPembelianFragment extends Fragment implements ValueEventListe
     public void onDataChange(DataSnapshot dataSnapshot) {
         if (dataSnapshot != null) {
             try {
-                long newOrder = dataSnapshot.child(Constants.PEMBELIAN_BARU).getChildrenCount();
-                long statusOrder = dataSnapshot.child(Constants.STATUS_PEMBELIAN).getChildrenCount();
+                long newOrder = dataSnapshot.child(Constants.TRANSAKSI_BARU).getChildrenCount();
+                long statusOrder = dataSnapshot.child(Constants.STATUS_TRANSAKSI).getChildrenCount();
                 long historyOrder = dataSnapshot.child(Constants.RIWAYAT_TRANSAKSI).getChildrenCount();
                 jmlPembelianBaru.setText(Long.toString(newOrder));
                 jmlStatusPembelian.setText(Long.toString(statusOrder));
@@ -86,7 +86,7 @@ public class KelolaPembelianFragment extends Fragment implements ValueEventListe
     public void onPesananBaruClicked() {
         Intent intent = new Intent(KelolaPembelianFragment.this.getActivity(), DaftarTransaksiActivity.class);
         intent.putExtra(Constants.TITLE, "Pesanan Baru");
-        intent.putExtra(Constants.TRANSAKSI, Constants.PEMBELIAN_BARU);
+        intent.putExtra(Constants.TRANSAKSI, Constants.TRANSAKSI_BARU);
         startActivity(intent);
     }
 
@@ -94,7 +94,7 @@ public class KelolaPembelianFragment extends Fragment implements ValueEventListe
     public void onStatusPenjualanClicked() {
         Intent intent = new Intent(KelolaPembelianFragment.this.getActivity(), DaftarTransaksiActivity.class);
         intent.putExtra(Constants.TITLE, "Status Pembelian");
-        intent.putExtra(Constants.TRANSAKSI, Constants.STATUS_PEMBELIAN);
+        intent.putExtra(Constants.TRANSAKSI, Constants.STATUS_TRANSAKSI);
         startActivity(intent);
     }
 

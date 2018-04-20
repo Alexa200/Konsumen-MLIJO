@@ -19,7 +19,6 @@ import com.mlijo.aryaym.konsumen_mlijo.Base.BaseActivity;
 import com.mlijo.aryaym.konsumen_mlijo.Base.ImageLoader;
 import com.mlijo.aryaym.konsumen_mlijo.DBModel.PenjualModel;
 import com.mlijo.aryaym.konsumen_mlijo.Obrolan.ObrolanActivity;
-import com.mlijo.aryaym.konsumen_mlijo.Produk.DaftarProdukPenjualActivity;
 import com.mlijo.aryaym.konsumen_mlijo.R;
 import com.mlijo.aryaym.konsumen_mlijo.Utils.Constants;
 

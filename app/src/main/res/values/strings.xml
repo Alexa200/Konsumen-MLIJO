@@ -182,5 +182,6 @@
     <string name="_5_min">5 \n  MIN</string>
     <string name="msg_error">Terjadi kesalahan, silahkan coba kembali</string>
     <string name="title_bantuan">Bantuan</string>
+    <string name="batalOrder">Apakah anda yakin akan membatalkan pesanan?</string>
 
 </resources>

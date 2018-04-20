@@ -27,7 +27,7 @@ import butterknife.Unbinder;
 public class SortingDialogFragment extends DialogFragment {
 
     public static final String TAG = "SortingDialog";
-    interface SortingListener {
+    public interface SortingListener {
         void onSorting(FilterProduk sortingProduk);
     }
 
